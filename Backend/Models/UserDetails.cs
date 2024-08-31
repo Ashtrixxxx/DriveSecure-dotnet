@@ -5,6 +5,8 @@
 
         public int UserID { get; set; }
 
+        public string UserPass { get; set; }
+
         public string ProfileUrl { get; set; }
 
         public string FirstName { get; set; }
