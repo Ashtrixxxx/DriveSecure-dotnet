@@ -17,6 +17,8 @@
 
         public string LicensePlateNumber { get; set; }
 
+        public string VehicleType { get; set; }
+
         public int UserID { get; set; }
 
         public int PolicyID { get; set; }
