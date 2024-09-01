@@ -1,26 +1,27 @@
-﻿namespace Backend.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Backend.Models
 {
     public class InsurancePolicies
     {
-
+        [Key]
         public int PolicyID { get; set; }
-
-        public int UserID { get; set; }
-
+        [Required]
         public string CoverageType { get; set; }
-
+        [Required]
         public DateOnly CoverageStartDate { get; set; }
-
+        [Required]
         public DateOnly CoverageEndDate { get; set; }
-
-        public decimal CoverageLimit { get; set; }
-
+        [Required]
+        public decimal CoverageAmount { get; set; }
         public int Status { get; set; }
 
-        public InsurancePolicies()
-        {
 
-        }
+        //Foreign Key
+        public int UserID { get; set; }
+        public UserDetails? UserDetails { get; set; }
+
+      
 
     }
 }
