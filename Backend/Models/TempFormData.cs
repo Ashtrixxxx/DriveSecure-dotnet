@@ -1,12 +1,20 @@
-﻿namespace Backend.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Backend.Models
 {
     public class TempFormData
     {
+        [Key]
         public int FormId { get; set; }
+        [Required]
         public string FormData { get; set; }
-        public int UserId { get; set; }
+        [Required]
         public string Status { get; set; }
-        public TempFormData()
-        { }
+
+        //Foreign Key
+        public int UserId { get; set; }
+        public UserDetails? UserDetails { get; set; }
+        
+
     }
 }

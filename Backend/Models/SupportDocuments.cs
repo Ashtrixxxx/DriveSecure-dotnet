@@ -1,13 +1,18 @@
-﻿namespace Backend.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Backend.Models
 {
     public class SupportDocuments
     {
-        public int PolicyId { get; set; }
+        [Key]
+        public int DocumentId { get; set; }
+        [Required]
         public string AddressProof { get; set; }
+        [Required]
         public int RCProof { get; set; }
-        public SupportDocuments()
-        {
-
-        }
+        
+        //Foreign Key
+        public int UserId { get; set; }
+        public UserDetails? UserDetails { get; set; }
     }
 }
