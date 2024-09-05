@@ -24,8 +24,7 @@ namespace Backend.Models
         public string ListPrice { get; set; }
         [Required]
         public string LicensePlateNumber { get; set; }
-        [Required]
-        public string Color { get; set; }
+        
         [Required]
         public string VehicleCondition { get; set; }
         [Required]

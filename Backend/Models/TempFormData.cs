@@ -13,7 +13,7 @@ namespace Backend.Models
 <<<<<<< HEAD
 
         //Foreign Key
-        public int UserId { get; set; }
+        public int UserID { get; set; }
         public UserDetails? UserDetails { get; set; }
         
 
