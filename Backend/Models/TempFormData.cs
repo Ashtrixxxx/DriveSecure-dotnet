@@ -12,7 +12,7 @@ namespace Backend.Models
         public string Status { get; set; }
 
         //Foreign Key
-        public int UserId { get; set; }
+        public int UserID { get; set; }
         public UserDetails? UserDetails { get; set; }
         
 
