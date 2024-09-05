@@ -26,14 +26,7 @@ namespace Backend.Models
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-        [Required]
-        public string StreetAddr { get; set; }
-        [Required]
-        public string Country { get; set; }
-        [Required]
-        public string Zipcode { get; set; }
-        [Required]
-        public string City { get; set; }
+        
         [Required]
         public string Occupation { get; set; }
 
