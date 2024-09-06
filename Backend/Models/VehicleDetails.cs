@@ -44,11 +44,9 @@ namespace Backend.Models
 
 
         //Foreign key
-        public int UserID { get; set; }
         public UserDetails? UserDetails { get; set; }
 
         //Foreign key
-        public int PolicyID { get; set; }
         public InsurancePolicies? Insurance { get; set; }
 
 

@@ -18,11 +18,9 @@ namespace Backend.Models
         public string PaymentMethod { get; set; }
 
         //Foreign Key
-        public int UserID { get; set; }
         public UserDetails? UserDetails { get; set; }
 
         // Foreign key for policy 
-        public int PolicyID { get; set; }
 
         public InsurancePolicies? Policy { get; set; }
         
