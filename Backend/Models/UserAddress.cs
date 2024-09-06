@@ -4,6 +4,8 @@ namespace Backend.Models
 {
     public class UserAddress
     {
+        [Key]
+        public int AddressId { get; set; }
 
         [Required]
         public string StreetAddr { get; set; }
@@ -16,8 +18,6 @@ namespace Backend.Models
 
         //Foriegn key 
 
-        [Required]
-        public int UserID { get; set; }
 
         public UserDetails? UserDetails { get; set; }
 

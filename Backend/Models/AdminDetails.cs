@@ -22,6 +22,7 @@ namespace Backend.Models
        
         public string password { get; set;}
 
+        public Role Role { get; set; }
 
     }
 }
