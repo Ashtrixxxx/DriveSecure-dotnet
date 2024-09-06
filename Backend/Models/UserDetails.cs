@@ -30,11 +30,13 @@ namespace Backend.Models
         [Required]
         public string Occupation { get; set; }
 
+
         //Navigation Properties
         public ICollection<InsurancePolicies> InsurancePolicies { get; set; } = new List<InsurancePolicies>();
         public ICollection<PaymentHistory> paymentHistories { get; set; } = new List<PaymentHistory>();
         public ICollection<SupportDocuments> SupportDocuments { get; set; } = new List<SupportDocuments>();
         public ICollection<VehicleDetails> VehicleDetails { get; set; } = new List<VehicleDetails>();
+
 
     }
 }

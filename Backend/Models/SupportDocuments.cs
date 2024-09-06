@@ -10,9 +10,13 @@ namespace Backend.Models
         public string AddressProof { get; set; }
         [Required]
         public int RCProof { get; set; }
+
         
         //Foreign Key
         public int UserID { get; set; }
         public UserDetails? UserDetails { get; set; }
+
+        
+       
     }
 }

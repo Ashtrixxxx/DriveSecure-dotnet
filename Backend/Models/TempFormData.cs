@@ -11,10 +11,14 @@ namespace Backend.Models
         [Required]
         public string Status { get; set; }
 
+
         //Foreign Key
         public int UserID { get; set; }
         public UserDetails? UserDetails { get; set; }
-        
+ 
+        [Required]
+        public DateOnly DateCreated { get; set; }
+
 
     }
 }
