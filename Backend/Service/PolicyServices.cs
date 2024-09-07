@@ -1,23 +1,34 @@
 ﻿using Backend.Models;
 using Backend.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Service
 {
     public class PolicyServices : IPolicyServices
     {
-       public async Task CreatePolicy(InsurancePolicies insurancePolicies)
+        private readonly DriveDbContext _driveDbContext;
+
+        public PolicyServices(DriveDbContext context) {
+        
+            _driveDbContext = context;
+        }
+
+       public async Task<InsurancePolicies> CreatePolicy(InsurancePolicies insurancePolicies)
         {
-            throw new NotImplementedException();
+             _driveDbContext.InsurancePolicies.Add(insurancePolicies);
+            await _driveDbContext.SaveChangesAsync();
+            return insurancePolicies;
+
         }
 
         public async Task<IEnumerable<InsurancePolicies>> GetAllPolicies()
         {
-            throw new NotImplementedException();
+            return await _driveDbContext.InsurancePolicies.ToListAsync();
         }
 
-      public async  Task<InsurancePolicies> GetPolicyDetails(int PolicyId)
+        public async  Task<InsurancePolicies> GetPolicyDetails(int PolicyId)
         {
-            throw new NotImplementedException();
+            return await _driveDbContext.InsurancePolicies.FindAsync(PolicyId);
         }
     }
 }

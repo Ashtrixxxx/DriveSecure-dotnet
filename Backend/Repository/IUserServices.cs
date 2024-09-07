@@ -5,9 +5,9 @@ namespace Backend.Repository
     public interface IUserServices
     {
 
-        Task CreateUser(UserDetails userDetails);
+        Task<UserDetails> CreateUser(UserDetails userDetails);
 
-        Task UpdateUser(UserDetails userDetails, string email);
+        Task<UserDetails> UpdateUser(UserDetails userDetails);
 
         Task<InsurancePolicies> GetPolicyStatus(InsurancePolicies policy, int PolicyId);
 

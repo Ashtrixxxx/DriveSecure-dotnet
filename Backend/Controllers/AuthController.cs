@@ -22,29 +22,27 @@ namespace Backend.Controllers
         }
 
         [NonAction]
-        public bool Validate(string username, string password)
+        public UserDetails Validate(string username, string password)
         {
 
-            var s = _con.UserDetails.Select(i => i.UserName == username && i.UserPass == password).FirstOrDefault();
-            if (s != null)
-            {
-                return true;
-            }
-            return false;
+            UserDetails s = _con.UserDetails
+                .FirstOrDefault(i => i.UserName == username && i.UserPass == password);
+          
+                return s;
+            
 
         }
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Auth([FromBody] UserDetails user)
+        public IActionResult Auth(string UserName, string UserPass)
         {
             IActionResult response = Unauthorized();
 
-            if (user != null)
+            var s = Validate(UserName, UserPass);
+                if (s != null)
             {
-                if (Validate(user.UserName, user.UserPass))
-                {
-
+                
                     var issuer = _config["Jwt:Issuer"];
                     var audience = _config["Jwt:Audience"];
                     var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]);
@@ -54,9 +52,9 @@ namespace Backend.Controllers
 
                     var subject = new ClaimsIdentity(new[]
                         {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Email, user.UserName),
-                    new Claim(ClaimTypes.Role, user.Role.ToString()) // Assign role to the token
+                    new Claim(JwtRegisteredClaimNames.Sub, s.UserName),
+                    new Claim(JwtRegisteredClaimNames.Email,s.Email),
+                    new Claim(ClaimTypes.Role, s.Role.ToString()) // Assign role to the token
                     });
 
                     var expires = DateTime.UtcNow.AddMinutes(10);
@@ -74,7 +72,7 @@ namespace Backend.Controllers
                     var jwtToken = tokenHandler.WriteToken(token);
 
                     return Ok(jwtToken);
-                }
+                
             }
             return response;
         }

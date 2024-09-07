@@ -5,7 +5,7 @@ namespace Backend.Repository
     public interface IPolicyServices
     {
 
-        Task CreatePolicy(InsurancePolicies insurancePolicies);
+        Task<InsurancePolicies> CreatePolicy(InsurancePolicies insurancePolicies);
 
         Task<IEnumerable<InsurancePolicies>> GetAllPolicies();
 
