@@ -1,25 +1,41 @@
 ﻿using Backend.Models;
 using Backend.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Service
 {
     public class VehicleServices : IVehicleServices
     {
 
-        Task IVehicleServices.CreateVehicle(VehicleDetails vehicleDetails)
+        private readonly DriveDbContext _dbContext;
+
+
+        public VehicleServices(DriveDbContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
+        }
+
+        async Task<VehicleDetails> IVehicleServices.CreateVehicle(VehicleDetails vehicleDetails)
+        {
+
+            _dbContext.VehicleDetails.Add(vehicleDetails);
+            await _dbContext.SaveChangesAsync();
+            return vehicleDetails;
+
         }
 
        
         public async Task<IEnumerable<VehicleDetails>> GetAllVehiclesAsync()
         {
-            throw new NotImplementedException();
+
+            return await _dbContext.VehicleDetails.ToListAsync();
+
         }
 
         public async Task<VehicleDetails> GetVehiclesAsync(int VehicleId)
         {
-            throw new NotImplementedException();
+            return await _dbContext.VehicleDetails.FindAsync(VehicleId);
+
         }
 
         
