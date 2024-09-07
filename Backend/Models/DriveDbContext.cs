@@ -16,7 +16,7 @@ namespace Backend.Models
 
          public DbSet<VehicleDetails> VehicleDetails { get; set; }
 
-        public DbSet<PaymentHistory> PaymentHistory { get; set; }
+        public DbSet<PaymentDetails> PaymentDetails { get; set; }
 
         public DbSet<SupportDocuments> SupportDocuments { get; set; }
 

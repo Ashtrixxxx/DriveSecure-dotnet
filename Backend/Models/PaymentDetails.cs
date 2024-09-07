@@ -2,7 +2,7 @@
 
 namespace Backend.Models
 {
-    public class PaymentHistory
+    public class PaymentDetails
     {
         [Key]
         public int PaymentId { get; set; }
