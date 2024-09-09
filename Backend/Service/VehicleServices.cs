@@ -37,7 +37,7 @@ namespace Backend.Service
             return await _dbContext.VehicleDetails.FindAsync(VehicleId);
 
         }
-
         
+
     }
 }
