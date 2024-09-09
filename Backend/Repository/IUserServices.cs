@@ -9,9 +9,9 @@ namespace Backend.Repository
 
         Task<UserDetails> UpdateUser(UserDetails userDetails);
 
-        Task<InsurancePolicies> GetPolicyStatus(InsurancePolicies policy, int PolicyId);
+        Task<IEnumerable<InsurancePolicies>> UserPolicyDetails(int UserId);
 
-        Task OnPaymentCompletion(string VDetails, string PolicyDetails, string PaymentDetails, string supportDocuments);
+        Task OnPaymentCompletion(VehicleDetails VDetails, InsurancePolicies PolicyDetails, PaymentDetails PaymentDetails, SupportDocuments supportDocuments);
 
     }
 }
