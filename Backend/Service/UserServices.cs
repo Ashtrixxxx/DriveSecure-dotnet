@@ -36,26 +36,22 @@ namespace Backend.Service
 
         }
 
-        public async Task<InsurancePolicies> GetPolicyStatus(InsurancePolicies policy, int PolicyId)
+        public async Task<IEnumerable<InsurancePolicies>> UserPolicyDetails(int UserId)
         {
-            throw new NotImplementedException();
+            return await _context.InsurancePolicies
+                                            .Where(p => p.UserDetails.UserID == UserId)
+                                            .ToListAsync();
         }
 
-        public async Task OnPaymentCompletion(string VDetails, string PolicyDetails, string PaymentDetails, string supportDocuments)
+
+        public async Task OnPaymentCompletion(VehicleDetails VDetails, InsurancePolicies PolicyDetails, PaymentDetails PaymentDetails, SupportDocuments supportDocuments)
         {
+            _vehicleServices.CreateVehicle(VDetails);
+            _policyServices.CreatePolicy(PolicyDetails);
+            _paymentServices.AddPaymentDetails(PaymentDetails);
+            _supportDocumentServices.AddSupportDocument(supportDocuments);
+    }
 
-            var vehicleDetails = JsonConvert.DeserializeObject<VehicleDetails>(VDetails);
-            var policyDetails = JsonConvert.DeserializeObject<InsurancePolicies>(PolicyDetails);
-            var paymentDetails = JsonConvert.DeserializeObject<PaymentDetails>(PaymentDetails);
-            var supportDocs = JsonConvert.DeserializeObject<SupportDocuments>(supportDocuments);
-
-             _vehicleServices.CreateVehicle(vehicleDetails);
-            _policyServices.CreatePolicy(policyDetails);
-            _paymentServices.AddPaymentDetails(paymentDetails);
-            _supportDocumentServices.AddSupportDocument(supportDocs);
-
-
-        }
 
 
 

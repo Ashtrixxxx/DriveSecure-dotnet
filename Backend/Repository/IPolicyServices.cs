@@ -11,6 +11,7 @@ namespace Backend.Repository
 
         Task <InsurancePolicies> GetPolicyDetails(int PolicyId);
 
+        Task<InsurancePolicies> GetPolicyStatus(int PolicyId);
 
 
     }

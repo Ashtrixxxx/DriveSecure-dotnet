@@ -4,11 +4,27 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using Backend.Controllers;
+using Backend.Repository;
+using Backend.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+
+builder.Services.AddScoped<IPolicyServices, PolicyServices>();
+builder.Services.AddScoped<IAdminService, AdminServices>();
+builder.Services.AddScoped<IUserServices, UserServices>();
+builder.Services.AddScoped<IPaymentServices, PaymentServices>();
+builder.Services.AddScoped<ISupportDocumentServices, SupportDocumentServices>();
+builder.Services.AddScoped<ITempFormDataServices, TempFormDataServices>();
+builder.Services.AddScoped<IVehicleServices, VehicleServices>();
+
+
+
+
 
 // Configure Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -82,5 +98,7 @@ app.UseAuthentication(); // This is required for JWT authentication
 app.UseAuthorization();
 
 app.MapControllers();
+
+
 
 app.Run();
