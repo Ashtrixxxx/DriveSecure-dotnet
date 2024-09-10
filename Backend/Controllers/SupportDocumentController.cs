@@ -18,7 +18,7 @@ namespace Backend.Controllers
         }
 
 
-        [Authorize(Roles = "admin,user")]
+        [Authorize(Policy = "AdminAndUser")]
 
         [HttpGet]
         public async Task<IEnumerable<SupportDocuments>> GetAllDocuments()
@@ -27,7 +27,7 @@ namespace Backend.Controllers
         }
 
 
-        [Authorize(Roles = "admin,user")]
+        [Authorize(Policy = "AdminAndUser")]
 
         [HttpGet("{Id}")]
         public async Task<SupportDocuments> GetDocuments(int Id)
