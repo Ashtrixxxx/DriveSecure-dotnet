@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class VehicleController : ControllerBase
     {
@@ -16,20 +16,24 @@ namespace Backend.Controllers
             _vehicleServices = vehicleServices;
         }
 
-        [Authorize(Roles = "user,admin")]
+        [HttpGet]
+        [Authorize(Policy = "AdminAndUser")]
         public async Task<IEnumerable<VehicleDetails>> GetAllVehicles()
         {
             return await _vehicleServices.GetAllVehiclesAsync();
         }
 
-        [Authorize(Roles = "user,admin")]
+        [HttpGet]
+
+        [Authorize(Policy = "AdminAndUser")]
         public async Task<VehicleDetails> GetVehicleById(int Vid)
         {
             return await _vehicleServices.GetVehiclesAsync(Vid);
 
         }
 
-        [Authorize(Roles = "user")]
+        [HttpPut]
+        [Authorize(Policy = "AdminAndUser")]
         public async Task<VehicleDetails> UpdateVehicle(VehicleDetails vehicleDetails)
         {
             return await _vehicleServices.UpdateVehicle(vehicleDetails);

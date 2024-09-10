@@ -56,6 +56,13 @@ builder.Services.AddSwaggerGen(opt =>
             }
         });
 });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminAndUser", policy =>
+        policy.RequireAssertion(context =>
+            context.User.IsInRole("admin") && context.User.IsInRole("user")));
+});
+
 
 // Configure JWT Authentication
 builder.Services.AddAuthentication(options =>

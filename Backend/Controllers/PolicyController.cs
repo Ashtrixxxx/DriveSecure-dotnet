@@ -21,7 +21,7 @@ namespace Backend.Controllers
         }
 
 
-        [Authorize(Roles = "admin,user")]
+        [Authorize(Policy = "AdminAndUser")]
 
         [HttpGet]
         public async Task<IEnumerable<InsurancePolicies>> GetAllPolicies()
@@ -30,7 +30,7 @@ namespace Backend.Controllers
         }
 
 
-        [Authorize(Roles = "admin,user")]
+        [Authorize(Policy = "AdminAndUser")]
 
         [HttpGet]
         public async Task<InsurancePolicies> GetPolicyStatus(int PolicyId)

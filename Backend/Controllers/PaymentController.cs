@@ -17,14 +17,14 @@ namespace Backend.Controllers
             _paymentServices = paymentServices;
         }
 
-        [Authorize(Roles = "admin,user")]
+        [Authorize(Policy = "AdminAndUser")]
         [HttpGet]
         public async Task<IEnumerable<PaymentDetails>> GetAllPayment()
         {
             return await _paymentServices.GetAllPaymentDetails();
         }
 
-        [Authorize(Roles = "admin,user")]
+        [Authorize(Policy = "AdminAndUser")]
         [HttpGet("{paymentId}")]
         public async Task<PaymentDetails> GetPayments(int paymentId)
         {
