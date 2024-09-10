@@ -39,9 +39,14 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        public async Task OnPaymentCompletion(VehicleDetails vehicle, InsurancePolicies PolicyDetails, PaymentDetails PaymentDetails, SupportDocuments supportDocuments)
+        public async Task OnPaymentCompletion([FromBody] PaymentCompletionDto paymentCompletionDto)
         {
-            await _user.OnPaymentCompletion(vehicle, PolicyDetails, PaymentDetails, supportDocuments);
+            var vehicle = paymentCompletionDto.Vehicle;
+            var policyDetails = paymentCompletionDto.PolicyDetails;
+            var paymentDetails = paymentCompletionDto.PaymentDetails;
+            var supportDocuments = paymentCompletionDto.SupportDocuments;
+
+            await _user.OnPaymentCompletion(vehicle, policyDetails, paymentDetails, supportDocuments);
         }
 
 

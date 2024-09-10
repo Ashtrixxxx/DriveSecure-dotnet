@@ -9,7 +9,7 @@ namespace Backend.Models
         [Required]
         public string AddressProof { get; set; }
         [Required]
-        public int RCProof { get; set; }
+        public string RCProof { get; set; }
 
         
         //Foreign Key

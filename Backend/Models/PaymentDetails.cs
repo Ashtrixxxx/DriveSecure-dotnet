@@ -8,9 +8,7 @@ namespace Backend.Models
         public int PaymentId { get; set; }
         [Required]
         public decimal PremiumAmount { get; set; }
-        [Required]
-        [MaxLength(50)]
-        public string PaymentStatus { get; set; }
+        
         [Required]
         public DateOnly PaymentDate { get; set; }
         [Required]
