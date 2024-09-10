@@ -38,6 +38,12 @@ namespace Backend.Service
 
         }
         
+        public async Task<VehicleDetails> UpdateVehicle(VehicleDetails vehicle)
+        {
+            _dbContext.Entry(vehicle).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+            return vehicle;
+        }
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Backend.Models;
 using Backend.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,11 +20,17 @@ namespace Backend.Controllers
 
         }
 
+
+        [Authorize(Roles = "admin,user")]
+
         [HttpGet]
         public async Task<IEnumerable<InsurancePolicies>> GetAllPolicies()
         {
             return await _policyServices.GetAllPolicies();
         }
+
+
+        [Authorize(Roles = "admin,user")]
 
         [HttpGet]
         public async Task<InsurancePolicies> GetPolicyStatus(int PolicyId)
