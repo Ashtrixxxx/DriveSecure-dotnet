@@ -11,7 +11,7 @@ namespace Backend.Repository
 
         Task<VehicleDetails> GetVehiclesAsync(int VehicleId);
 
-
+        Task<VehicleDetails> UpdateVehicle(VehicleDetails vehicleDetails);
 
 
     }

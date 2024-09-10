@@ -1,6 +1,7 @@
 ﻿using Backend.Models;
 using Backend.Repository;
 using Backend.Service;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,12 +18,15 @@ namespace Backend.Controllers
             _user = userServices;
         }
 
-
+        [Authorize(Roles = "User")]
         [HttpPost]
         public async Task<UserDetails> CreateUser(UserDetails userDetails)
         {
             return await _user.CreateUser(userDetails);
         }
+
+
+        [Authorize(Roles = "user")]
 
         [HttpGet]
         public async Task<UserDetails> UpdateUser(UserDetails userDetails)
@@ -30,13 +34,15 @@ namespace Backend.Controllers
             return await _user.UpdateUser(userDetails);
         }
 
-
+        [Authorize(Roles = "user")]
         [HttpGet]
         public async Task<IEnumerable<InsurancePolicies>> GetUserPolicies(int UserId)
         {
             return await _user.UserPolicyDetails(UserId);
 
         }
+
+        [Authorize(Roles = "user")]
 
         [HttpPost]
         public async Task OnPaymentCompletion([FromBody] PaymentCompletionDto paymentCompletionDto)

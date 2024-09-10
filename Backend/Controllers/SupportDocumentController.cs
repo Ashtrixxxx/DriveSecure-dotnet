@@ -1,5 +1,6 @@
 ﻿using Backend.Models;
 using Backend.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,11 +17,17 @@ namespace Backend.Controllers
             _documentServices =supportDocument;
         }
 
+
+        [Authorize(Roles = "admin,user")]
+
         [HttpGet]
         public async Task<IEnumerable<SupportDocuments>> GetAllDocuments()
         {
             return await _documentServices.GetAllSupportDocument();
         }
+
+
+        [Authorize(Roles = "admin,user")]
 
         [HttpGet("{Id}")]
         public async Task<SupportDocuments> GetDocuments(int Id)
@@ -28,17 +35,26 @@ namespace Backend.Controllers
             return await _documentServices.GetSupportDocumnetsById(Id);
         }
 
+
+        [Authorize(Roles = "user")]
+
         [HttpPost]
         public async Task<SupportDocuments> CreateSupportDocuments(SupportDocuments supportDocuments)
         {
             return await _documentServices.AddSupportDocument(supportDocuments);
         }
 
+
+        [Authorize(Roles = "user")]
+
         [HttpPut]
         public async Task<SupportDocuments> UpdateSupportDocuments(SupportDocuments supportDocuments)
         {
             return await _documentServices.UpdateSupportDocuments(supportDocuments);
         }
+
+
+        [Authorize(Roles = "admin")]
 
         [HttpDelete]
         public async Task DeletePaymentDetails(int Id)
