@@ -37,5 +37,35 @@ namespace Backend.Controllers
         {
             return await _policyServices.GetPolicyStatus(PolicyId);
         }
+
+        [Authorize(Roles = "user")]
+        [HttpPost("{PolicyId}")]
+        public async Task<InsurancePolicies> PolicyAccepted(int PolicyId)
+        {
+            return  await _policyServices.PolicyAccepted(PolicyId);
+        }
+
+        [Authorize(Roles = "user")]
+        [HttpPost("{PolicyId}")]
+        public async Task<InsurancePolicies> PolicyRejected(int PolicyId)
+        {
+            return await _policyServices.PolicyRejected(PolicyId);
+        }
+
+        [Authorize(Roles = "user")]
+        [HttpGet]
+        public async Task<IEnumerable<InsurancePolicies>> ShowAcceptedPolicies()
+        {
+            return await _policyServices.ShowAcceptedPolicies();
+        }
+
+
+        [Authorize(Roles = "user")]
+        [HttpGet]
+        public async Task<IEnumerable<InsurancePolicies>> ShowRejectedPolicies()
+        {
+            return await _policyServices.ShowRejectedPolicies();
+        }
+
     }
 }

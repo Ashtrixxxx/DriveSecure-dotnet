@@ -36,6 +36,39 @@ namespace Backend.Service
             return await _driveDbContext.InsurancePolicies.FindAsync(PolicyId);
         }
 
-       
+        public async Task<InsurancePolicies> PolicyAccepted(int PolicyId)
+        {
+            
+            var s = await _driveDbContext.InsurancePolicies.FindAsync(PolicyId);
+
+            s.Status = 1;
+
+            _driveDbContext.SaveChangesAsync();
+
+            return s;
+
+
+        }
+
+        public async Task<InsurancePolicies> PolicyRejected(int PolicyId)
+        {
+            var s = await _driveDbContext.InsurancePolicies.FindAsync(PolicyId);
+
+            s.Status = 2;
+
+            _driveDbContext.SaveChangesAsync();
+
+            return s;
+        }
+
+        public async Task<IEnumerable<InsurancePolicies>> ShowAcceptedPolicies()
+        {
+            return await _driveDbContext.InsurancePolicies.Where(i => i.Status == 1).ToListAsync();
+        }
+
+        public async Task<IEnumerable<InsurancePolicies>> ShowRejectedPolicies()
+        {
+            return await _driveDbContext.InsurancePolicies.Where(i => i.Status == 2).ToListAsync();
+        }
     }
 }
