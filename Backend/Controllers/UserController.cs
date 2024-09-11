@@ -35,7 +35,7 @@ namespace Backend.Controllers
         }
 
         [Authorize(Roles = "user")]
-        [HttpGet]
+        [HttpGet("{UserId}")]
         public async Task<IEnumerable<InsurancePolicies>> GetUserPolicies(int UserId)
         {
             return await _user.UserPolicyDetails(UserId);

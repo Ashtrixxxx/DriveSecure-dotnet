@@ -13,6 +13,12 @@ namespace Backend.Repository
 
         Task<InsurancePolicies> GetPolicyStatus(int PolicyId);
 
+        Task<InsurancePolicies> PolicyAccepted(int PolicyId);
 
+        Task<InsurancePolicies> PolicyRejected(int PolicyId);
+
+        Task<IEnumerable<InsurancePolicies>> ShowAcceptedPolicies();
+
+        Task<IEnumerable<InsurancePolicies>> ShowRejectedPolicies();
     }
 }

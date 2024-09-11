@@ -11,8 +11,8 @@ namespace Backend.Controllers
     public class VehicleController : ControllerBase
     {
         private readonly IVehicleServices _vehicleServices;
-        public VehicleController(IVehicleServices vehicleServices) { 
-        
+        public VehicleController(IVehicleServices vehicleServices) {
+
             _vehicleServices = vehicleServices;
         }
 
@@ -23,7 +23,7 @@ namespace Backend.Controllers
             return await _vehicleServices.GetAllVehiclesAsync();
         }
 
-        [HttpGet]
+        [HttpGet("{Vid}")]
 
         [Authorize(Policy = "AdminAndUser")]
         public async Task<VehicleDetails> GetVehicleById(int Vid)

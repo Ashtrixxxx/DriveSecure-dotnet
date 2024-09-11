@@ -36,14 +36,14 @@ namespace Backend.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        [HttpGet]
+        [HttpGet("{AdminId}")]
         public async Task<AdminDetails> GetAdmin(int AdminId)
         {
             return await _adminService.GetAdminById(AdminId);
         }
 
         [Authorize(Roles = "admin")]
-        [HttpDelete]
+        [HttpDelete("{AdminId}")]
         public async Task DeleteAdmin(int AdminId)
         {
             await _adminService.DeleteAdmin(AdminId);

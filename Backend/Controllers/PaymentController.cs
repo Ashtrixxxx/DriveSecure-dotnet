@@ -50,7 +50,7 @@ namespace Backend.Controllers
 
         [Authorize(Roles = "admin")]
 
-        [HttpDelete]
+        [HttpDelete("{Id}")]
         public async Task DeletePaymentDetails(int Id)
         {
             await _paymentServices.DeletePaymentDetails(Id);

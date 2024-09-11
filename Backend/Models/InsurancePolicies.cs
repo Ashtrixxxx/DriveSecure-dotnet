@@ -7,7 +7,7 @@ namespace Backend.Models
         [Key]
         public int PolicyID { get; set; }
         [Required]
-        public string CoverageType { get; set; }
+        public string CoverageType { get; set; } // Third party, self , Theft cover
         [Required]
         public DateOnly CoverageStartDate { get; set; }
         [Required]
