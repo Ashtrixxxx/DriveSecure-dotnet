@@ -60,7 +60,7 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminAndUser", policy =>
         policy.RequireAssertion(context =>
-            context.User.IsInRole("admin") && context.User.IsInRole("user")));
+            context.User.IsInRole("admin") || context.User.IsInRole("user")));
 });
 
 

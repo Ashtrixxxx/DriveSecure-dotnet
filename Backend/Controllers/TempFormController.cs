@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers
 {
-    [Route("api/[controller]/[action]")]
-    [ApiController]
+//    [Route("api/[controller]/[action]")]
+ //   [ApiController]
     public class TempFormController : ControllerBase
     {
         private readonly ITempFormDataServices _tempFormServices;
