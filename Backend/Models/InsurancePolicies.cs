@@ -12,6 +12,7 @@ namespace Backend.Models
         public DateOnly CoverageStartDate { get; set; }
         [Required]
         public DateOnly CoverageEndDate { get; set; }
+        public bool IsRenewed { get; set; }
         [Required]
         public decimal CoverageAmount { get; set; }
         public int Status { get; set; }

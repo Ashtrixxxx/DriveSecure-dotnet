@@ -23,6 +23,7 @@ builder.Services.AddScoped<ITempFormDataServices, TempFormDataServices>();
 builder.Services.AddScoped<IVehicleServices, VehicleServices>();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IReminderService, ReminderService>();
 
 
 

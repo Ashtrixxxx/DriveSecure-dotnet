@@ -20,5 +20,7 @@ namespace Backend.Repository
         Task<IEnumerable<InsurancePolicies>> ShowAcceptedPolicies();
 
         Task<IEnumerable<InsurancePolicies>> ShowRejectedPolicies();
+
+        Task<IEnumerable<InsurancePolicies>> GetPoliciesExpiringSoonAsync(DateOnly expirationDate);
     }
 }

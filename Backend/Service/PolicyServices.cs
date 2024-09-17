@@ -70,5 +70,12 @@ namespace Backend.Service
         {
             return await _driveDbContext.InsurancePolicies.Where(i => i.Status == 2).ToListAsync();
         }
+
+        public async Task<IEnumerable<InsurancePolicies>> GetPoliciesExpiringSoonAsync(DateOnly expirationDate)
+        {
+            return await _driveDbContext.InsurancePolicies
+                .Where(policy => policy.CoverageEndDate <= expirationDate && !policy.IsRenewed)
+                .ToListAsync();
+        }
     }
 }
