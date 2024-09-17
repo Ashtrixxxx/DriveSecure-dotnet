@@ -21,8 +21,8 @@ builder.Services.AddScoped<IPaymentServices, PaymentServices>();
 builder.Services.AddScoped<ISupportDocumentServices, SupportDocumentServices>();
 builder.Services.AddScoped<ITempFormDataServices, TempFormDataServices>();
 builder.Services.AddScoped<IVehicleServices, VehicleServices>();
-
-
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 

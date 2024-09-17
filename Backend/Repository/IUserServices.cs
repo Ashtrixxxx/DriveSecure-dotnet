@@ -1,4 +1,5 @@
-﻿using Backend.Models;
+﻿using Backend.Dto;
+using Backend.Models;
 
 namespace Backend.Repository
 {
@@ -11,7 +12,8 @@ namespace Backend.Repository
 
         Task<IEnumerable<InsurancePolicies>> UserPolicyDetails(int UserId);
 
-        Task OnPaymentCompletion(VehicleDetails VDetails, InsurancePolicies PolicyDetails, PaymentDetails PaymentDetails, SupportDocuments supportDocuments);
+        Task OnPaymentCompletion(int userId,VehicleDetails VDetails, InsurancePolicies PolicyDetails, PaymentDetails PaymentDetails, SupportDocuments supportDocuments);
 
+        Task SimpleTestEmail(int id);
     }
 }
