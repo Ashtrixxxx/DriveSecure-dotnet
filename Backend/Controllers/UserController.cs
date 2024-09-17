@@ -1,4 +1,5 @@
-﻿using Backend.Models;
+﻿using Backend.Dto;
+using Backend.Models;
 using Backend.Repository;
 using Backend.Service;
 using Microsoft.AspNetCore.Authorization;
@@ -44,15 +45,25 @@ namespace Backend.Controllers
 
         [Authorize(Roles = "user")]
 
-        [HttpPost]
-        public async Task OnPaymentCompletion([FromBody] PaymentCompletionDto paymentCompletionDto)
+        [HttpPost("{userId}")]
+        public async Task OnPaymentCompletion([FromBody] PaymentCompletionDto paymentCompletionDto, int userId)
         {
             var vehicle = paymentCompletionDto.Vehicle;
             var policyDetails = paymentCompletionDto.PolicyDetails;
             var paymentDetails = paymentCompletionDto.PaymentDetails;
             var supportDocuments = paymentCompletionDto.SupportDocuments;
 
-            await _user.OnPaymentCompletion(vehicle, policyDetails, paymentDetails, supportDocuments);
+            await _user.OnPaymentCompletion(userId, vehicle, policyDetails, paymentDetails, supportDocuments);
+        }
+
+        [HttpPost("{id}")]
+
+        public async Task SimpleTestEmail(int id)
+        {
+            
+           await _user.SimpleTestEmail(id);
+
+
         }
 
 

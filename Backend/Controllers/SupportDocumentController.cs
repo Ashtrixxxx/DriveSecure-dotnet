@@ -36,9 +36,9 @@ namespace Backend.Controllers
         }
 
 
-        [Authorize(Roles = "user")]
+        //[Authorize(Roles = "user")]
 
-        [HttpPost]
+        [NonAction]
         public async Task<SupportDocuments> CreateSupportDocuments(SupportDocuments supportDocuments)
         {
             return await _documentServices.AddSupportDocument(supportDocuments);

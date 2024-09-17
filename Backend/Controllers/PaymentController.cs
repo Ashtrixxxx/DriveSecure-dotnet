@@ -32,8 +32,7 @@ namespace Backend.Controllers
         }
 
 
-        [Authorize(Roles = "user")]
-        [HttpPost]
+        [NonAction]
         public async Task<PaymentDetails> CreatePaymentDetails(PaymentDetails paymentDetails)
         {
            return  await _paymentServices.AddPaymentDetails(paymentDetails);
