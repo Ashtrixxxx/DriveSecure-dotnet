@@ -24,5 +24,18 @@ namespace Backend.Models
 
         public DbSet<AdminDetails> Admins { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserDetails>()
+                .HasIndex(u => u.UserName)
+                .IsUnique(); // Set UserName as unique
+
+            modelBuilder.Entity<UserDetails>()
+                .HasIndex(u => u.Email)
+                .IsUnique(); // Set Email as unique
+
+            base.OnModelCreating(modelBuilder);
+        }
+
     }
 }

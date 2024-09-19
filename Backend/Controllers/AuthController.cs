@@ -82,50 +82,56 @@ namespace Backend.Controllers
             return response;
          
         }
-
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult UserAuth(string UserName, string UserPass)
+        public IActionResult UserAuth([FromBody] UserAuthRequest request)
         {
+            Console.WriteLine($"UserName: {request.UserName}, UserPass: {request.UserPass}");
             IActionResult response = Unauthorized();
 
-            var s = Validate(UserName, UserPass);
-                if (s != null)
+            var s = Validate(request.UserName, request.UserPass);
+            if (s != null)
             {
-                
-                    var issuer = _config["Jwt:Issuer"];
-                    var audience = _config["Jwt:Audience"];
-                    var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]);
-                    var signingCredentials = new SigningCredentials(
-                                            new SymmetricSecurityKey(key),
-                                            SecurityAlgorithms.HmacSha512Signature);
+                var issuer = _config["Jwt:Issuer"];
+                var audience = _config["Jwt:Audience"];
+                var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]);
+                var signingCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha512Signature);
 
-                    var subject = new ClaimsIdentity(new[]
-                        {
-                    new Claim(JwtRegisteredClaimNames.Sub, s.UserName),
-                    new Claim(JwtRegisteredClaimNames.Email,s.Email),
-                    new Claim(ClaimTypes.Role, s.Role.ToString()) // Assign role to the token
-                    });
+                var subject = new ClaimsIdentity(new[]
+                {
+            new Claim(ClaimTypes.NameIdentifier, s.UserID.ToString()),
+            new Claim(JwtRegisteredClaimNames.Sub, s.UserName),
+            new Claim(JwtRegisteredClaimNames.Email, s.Email),
+            new Claim(ClaimTypes.Role, s.Role.ToString())
+        });
 
-                    var expires = DateTime.UtcNow.AddMinutes(10);
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = subject,
+                    Expires = DateTime.UtcNow.AddMinutes(1),
+                    Issuer = issuer,
+                    Audience = audience,
+                    SigningCredentials = signingCredentials
+                };
 
-                    var tokenDescriptor = new SecurityTokenDescriptor
-                    {
-                        Subject = subject,
-                        Expires = DateTime.UtcNow.AddMinutes(10),
-                        Issuer = issuer,
-                        Audience = audience,
-                        SigningCredentials = signingCredentials
-                    };
-                    var tokenHandler = new JwtSecurityTokenHandler();
-                    var token = tokenHandler.CreateToken(tokenDescriptor);
-                    var jwtToken = tokenHandler.WriteToken(token);
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                var jwtToken = tokenHandler.WriteToken(token);
 
-                    return Ok(jwtToken);
-                
-            }
+                return Ok(new { Token = jwtToken });
+                }
+
             return response;
         }
+
+        public class UserAuthRequest
+        {
+            public string UserName { get; set; }
+            public string UserPass { get; set; }
+        }
+
     }
 
 }

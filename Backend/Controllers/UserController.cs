@@ -19,7 +19,7 @@ namespace Backend.Controllers
             _user = userServices;
         }
 
-        [Authorize(Roles = "User")]
+        
         [HttpPost]
         public async Task<UserDetails> CreateUser(UserDetails userDetails)
         {

@@ -86,12 +86,27 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder
+                .WithOrigins("http://localhost:3000") // Replace with your frontend URL
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials(); // Allow credentials (cookies, authorization headers)
+        });
+});
 // Configure the DbContext
 builder.Services.AddDbContext<DriveDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("conn")));
 
 // Build the app
 var app = builder.Build();
+
+app.UseCors("AllowSpecificOrigin");
 
 // Middleware for development environment
 if (app.Environment.IsDevelopment())
