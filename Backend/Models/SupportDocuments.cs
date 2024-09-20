@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models
 {
@@ -12,6 +13,10 @@ namespace Backend.Models
         public string RCProof { get; set; }
 
         
+        public int UserID { get; set; }
+
+        [ForeignKey("UserID")]
+
         //Foreign Key
         public UserDetails? UserDetails { get; set; }
 

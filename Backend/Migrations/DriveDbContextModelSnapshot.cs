@@ -79,12 +79,12 @@ namespace Backend.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserDetailsUserID")
+                    b.Property<int>("UserID")
                         .HasColumnType("int");
 
                     b.HasKey("PolicyID");
 
-                    b.HasIndex("UserDetailsUserID");
+                    b.HasIndex("UserID");
 
                     b.ToTable("InsurancePolicies");
                 });
@@ -105,20 +105,20 @@ namespace Backend.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int?>("PolicyID")
+                    b.Property<int>("PolicyID")
                         .HasColumnType("int");
 
                     b.Property<decimal>("PremiumAmount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("UserDetailsUserID")
+                    b.Property<int>("UserID")
                         .HasColumnType("int");
 
                     b.HasKey("PaymentId");
 
                     b.HasIndex("PolicyID");
 
-                    b.HasIndex("UserDetailsUserID");
+                    b.HasIndex("UserID");
 
                     b.ToTable("PaymentDetails");
                 });
@@ -139,12 +139,12 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserDetailsUserID")
+                    b.Property<int>("UserID")
                         .HasColumnType("int");
 
                     b.HasKey("DocumentId");
 
-                    b.HasIndex("UserDetailsUserID");
+                    b.HasIndex("UserID");
 
                     b.ToTable("SupportDocuments");
                 });
@@ -296,9 +296,6 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("InsurancePolicyID")
-                        .HasColumnType("int");
-
                     b.Property<DateOnly>("LastServiceDate")
                         .HasColumnType("date");
 
@@ -316,6 +313,9 @@ namespace Backend.Migrations
                     b.Property<int>("NumberOfSeats")
                         .HasColumnType("int");
 
+                    b.Property<int>("PolicyID")
+                        .HasColumnType("int");
+
                     b.Property<DateOnly>("RegistrationDate")
                         .HasColumnType("date");
 
@@ -328,7 +328,7 @@ namespace Backend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserDetailsUserID")
+                    b.Property<int>("UserID")
                         .HasColumnType("int");
 
                     b.Property<string>("VehicleCondition")
@@ -351,9 +351,9 @@ namespace Backend.Migrations
 
                     b.HasKey("VehicleId");
 
-                    b.HasIndex("InsurancePolicyID");
+                    b.HasIndex("PolicyID");
 
-                    b.HasIndex("UserDetailsUserID");
+                    b.HasIndex("UserID");
 
                     b.ToTable("VehicleDetails");
                 });
@@ -362,7 +362,9 @@ namespace Backend.Migrations
                 {
                     b.HasOne("Backend.Models.UserDetails", "UserDetails")
                         .WithMany()
-                        .HasForeignKey("UserDetailsUserID");
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("UserDetails");
                 });
@@ -371,11 +373,15 @@ namespace Backend.Migrations
                 {
                     b.HasOne("Backend.Models.InsurancePolicies", "Policy")
                         .WithMany()
-                        .HasForeignKey("PolicyID");
+                        .HasForeignKey("PolicyID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Backend.Models.UserDetails", "UserDetails")
                         .WithMany()
-                        .HasForeignKey("UserDetailsUserID");
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Policy");
 
@@ -386,7 +392,9 @@ namespace Backend.Migrations
                 {
                     b.HasOne("Backend.Models.UserDetails", "UserDetails")
                         .WithMany()
-                        .HasForeignKey("UserDetailsUserID");
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("UserDetails");
                 });
@@ -413,11 +421,15 @@ namespace Backend.Migrations
                 {
                     b.HasOne("Backend.Models.InsurancePolicies", "Insurance")
                         .WithMany()
-                        .HasForeignKey("InsurancePolicyID");
+                        .HasForeignKey("PolicyID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Backend.Models.UserDetails", "UserDetails")
                         .WithMany()
-                        .HasForeignKey("UserDetailsUserID");
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Insurance");
 

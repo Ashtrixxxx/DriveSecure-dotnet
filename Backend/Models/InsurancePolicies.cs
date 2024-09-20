@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models
 {
@@ -17,8 +18,10 @@ namespace Backend.Models
         public decimal CoverageAmount { get; set; }
         public int Status { get; set; }
 
+        public int UserID { get; set; }
 
         //Foreign Key
+        [ForeignKey("UserID")]
         public UserDetails? UserDetails { get; set; }
 
       

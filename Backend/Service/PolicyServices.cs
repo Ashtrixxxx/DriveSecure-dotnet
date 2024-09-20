@@ -26,9 +26,11 @@ namespace Backend.Service
             return await _driveDbContext.InsurancePolicies.FindAsync(PolicyId);
         }
 
-        public async Task<IEnumerable<InsurancePolicies>> GetAllPolicies()
+        public async Task<IEnumerable<InsurancePolicies>> GetAllPolicies(int userId)
         {
-            return await _driveDbContext.InsurancePolicies.ToListAsync();
+            return await _driveDbContext.InsurancePolicies
+                                        .Where(policy => policy.UserID == userId)
+                                        .ToListAsync();
         }
 
         public async  Task<InsurancePolicies> GetPolicyDetails(int PolicyId)
