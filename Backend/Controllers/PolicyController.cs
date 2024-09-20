@@ -23,10 +23,10 @@ namespace Backend.Controllers
 
         [Authorize(Policy = "AdminAndUser")]
 
-        [HttpGet]
-        public async Task<IEnumerable<InsurancePolicies>> GetAllPolicies()
+        [HttpGet("{UserId}")]
+        public async Task<IEnumerable<InsurancePolicies>> GetAllPolicies(int UserId)
         {
-            return await _policyServices.GetAllPolicies();
+            return await _policyServices.GetAllPolicies(UserId);
         }
 
 

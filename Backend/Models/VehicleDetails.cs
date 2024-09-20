@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Backend.Models
 {
@@ -42,11 +43,19 @@ namespace Backend.Models
         public DateOnly RegistrationDate { get; set;}
 
 
+        public int UserID { get; set; }
+
 
         //Foreign key
+        [ForeignKey("UserID")]
         public UserDetails? UserDetails { get; set; }
 
+
+        public int PolicyID { get; set; }
+
         //Foreign key
+        [ForeignKey("PolicyID")]
+
         public InsurancePolicies? Insurance { get; set; }
 
 

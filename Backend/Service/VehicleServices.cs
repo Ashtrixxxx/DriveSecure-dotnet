@@ -25,10 +25,10 @@ namespace Backend.Service
         }
 
        
-        public async Task<IEnumerable<VehicleDetails>> GetAllVehiclesAsync()
+        public async Task<IEnumerable<VehicleDetails>> GetAllVehiclesAsync(int UserId)
         {
 
-            return await _dbContext.VehicleDetails.ToListAsync();
+            return await _dbContext.VehicleDetails.Where(i=> i.UserID == UserId).ToListAsync();
 
         }
 
