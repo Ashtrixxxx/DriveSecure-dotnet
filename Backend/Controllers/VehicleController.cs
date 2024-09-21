@@ -16,12 +16,21 @@ namespace Backend.Controllers
             _vehicleServices = vehicleServices;
         }
 
-        [HttpGet]
+        [HttpGet("{Vid}")]
         [Authorize(Policy = "AdminAndUser")]
-        public async Task<IEnumerable<VehicleDetails>> GetAllVehicles()
+        public async Task<IEnumerable<VehicleDetails>> GetAllVehicles(int Vid)
         {
-            return await _vehicleServices.GetAllVehiclesAsync();
+            return await _vehicleServices.GetAllVehiclesAsync(Vid);
         }
+
+        [Authorize(Roles ="admin")]
+        [HttpGet("{PolicyID}")]
+
+        public async Task<VehicleDetails> GetVehicleForPolicy(int PolicyID)
+        {
+            return await _vehicleServices.GetVehicleForPolicy(PolicyID);
+        }
+
 
         [HttpGet("{Vid}")]
 

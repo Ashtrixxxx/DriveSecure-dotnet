@@ -24,6 +24,11 @@ namespace Backend.Service
 
         }
 
+        public async Task<VehicleDetails> GetVehicleForPolicy(int PolicyId)
+        {
+            return await _dbContext.VehicleDetails
+                    .FirstOrDefaultAsync(v => v.PolicyID == PolicyId);
+        }
        
         public async Task<IEnumerable<VehicleDetails>> GetAllVehiclesAsync(int UserId)
         {

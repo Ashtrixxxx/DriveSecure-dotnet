@@ -62,6 +62,11 @@ namespace Backend.Service
             return await _context.UserDetails.FindAsync(UserId);
         }
 
+        public async Task<UserDetails> GetUserByUserName(string username)
+        {
+            return await _context.UserDetails.FirstOrDefaultAsync(p => p.UserName == username);
+        }
+
 
         public async Task OnPaymentCompletion(int UserId,VehicleDetails VDetails, InsurancePolicies PolicyDetails, PaymentDetails PaymentDetails, SupportDocuments supportDocuments)
         {

@@ -6,6 +6,10 @@ namespace Backend.Repository
     {
         Task<IEnumerable<SupportDocuments>> GetAllSupportDocument();
 
+
+        Task<SupportDocuments> GetSupportDocumnetsForPolicy(int PolicyId);
+
+
         Task<SupportDocuments> GetSupportDocumnetsById(int id);
 
         Task<SupportDocuments> AddSupportDocument(SupportDocuments documents);

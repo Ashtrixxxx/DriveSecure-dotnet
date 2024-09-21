@@ -21,6 +21,13 @@ namespace Backend.Service
 
         }
 
+        public async Task<IEnumerable<InsurancePolicies>> GetAllPoliciesForAdmin()
+        {
+            return await _driveDbContext.InsurancePolicies.ToListAsync();
+
+        }
+
+
         public async Task<InsurancePolicies> GetPolicyStatus(int PolicyId)
         {
             return await _driveDbContext.InsurancePolicies.FindAsync(PolicyId);
@@ -43,7 +50,7 @@ namespace Backend.Service
             
             var s = await _driveDbContext.InsurancePolicies.FindAsync(PolicyId);
 
-            s.Status = 1;
+            s.Status = 2;
 
             _driveDbContext.SaveChangesAsync();
 
@@ -56,7 +63,7 @@ namespace Backend.Service
         {
             var s = await _driveDbContext.InsurancePolicies.FindAsync(PolicyId);
 
-            s.Status = 2;
+            s.Status = 3;
 
             _driveDbContext.SaveChangesAsync();
 
