@@ -7,7 +7,9 @@ namespace Backend.Repository
 
         Task<VehicleDetails> CreateVehicle(VehicleDetails vehicleDetails);
 
-        Task<IEnumerable<VehicleDetails>> GetAllVehiclesAsync();
+        Task<IEnumerable<VehicleDetails>> GetAllVehiclesAsync(int UserID);
+
+        Task<VehicleDetails> GetVehicleForPolicy(int PolicyID); 
 
         Task<VehicleDetails> GetVehiclesAsync(int VehicleId);
 

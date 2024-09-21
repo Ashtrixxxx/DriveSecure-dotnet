@@ -6,6 +6,7 @@ namespace Backend.Repository
     public interface IUserServices
     {
 
+        Task<UserDetails> GetUserByUserName(string username);
         Task<UserDetails> CreateUser(UserDetails userDetails);
 
         Task<UserDetails> UpdateUser(UserDetails userDetails);

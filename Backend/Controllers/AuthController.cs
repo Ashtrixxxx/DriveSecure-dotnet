@@ -39,16 +39,22 @@ namespace Backend.Controllers
             return a;
         }
 
+        public class AdminLoginDto
+        {
+            public string AdminEmail { get; set; }
+            public string AdminPass { get; set; }
+        }
+
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult AdminAuth(string AdminEmail, string AdminPass)
+        public IActionResult AdminAuth([FromBody] AdminLoginDto adminLoginDto)
         {
             IActionResult response = Unauthorized();
 
-            var s = ValidateAdmin(AdminEmail, AdminPass);
+            // Validate the admin login details
+            var s = ValidateAdmin(adminLoginDto.AdminEmail, adminLoginDto.AdminPass);
             if (s != null)
             {
-
                 var issuer = _config["Jwt:Issuer"];
                 var audience = _config["Jwt:Audience"];
                 var key = Encoding.UTF8.GetBytes(_config["Jwt:Key"]);
@@ -58,11 +64,9 @@ namespace Backend.Controllers
 
                 var subject = new ClaimsIdentity(new[]
                     {
-                    new Claim(JwtRegisteredClaimNames.Email,s.Email),
-                    new Claim(ClaimTypes.Role, s.Role.ToString()) // Assign role to the token
-                    });
-
-                var expires = DateTime.UtcNow.AddMinutes(10);
+                new Claim(JwtRegisteredClaimNames.Email, s.Email),
+                new Claim(ClaimTypes.Role, s.Role.ToString()) // Assign role to the token
+            });
 
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
@@ -72,16 +76,17 @@ namespace Backend.Controllers
                     Audience = audience,
                     SigningCredentials = signingCredentials
                 };
+
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 var jwtToken = tokenHandler.WriteToken(token);
 
-                return Ok(jwtToken);
-
+                return Ok(new { token = jwtToken });
             }
+
             return response;
-         
         }
+
         [AllowAnonymous]
         [HttpPost]
         public IActionResult UserAuth([FromBody] UserAuthRequest request)
@@ -110,7 +115,7 @@ namespace Backend.Controllers
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = subject,
-                    Expires = DateTime.UtcNow.AddMinutes(1),
+                    Expires = DateTime.UtcNow.AddMinutes(30),
                     Issuer = issuer,
                     Audience = audience,
                     SigningCredentials = signingCredentials

@@ -29,6 +29,15 @@ namespace Backend.Controllers
             return await _policyServices.GetAllPolicies(UserId);
         }
 
+        [Authorize(Roles ="admin")]
+        [HttpGet]
+       public async Task<IEnumerable<InsurancePolicies>> GetAllPoliciesForAdmin()
+        {
+            return await _policyServices.GetAllPoliciesForAdmin();
+        }
+
+
+
 
         [Authorize(Policy = "AdminAndUser")]
 
@@ -38,14 +47,14 @@ namespace Backend.Controllers
             return await _policyServices.GetPolicyStatus(PolicyId);
         }
 
-        [Authorize(Roles = "user")]
+        [Authorize(Roles = "admin")]
         [HttpPost("{PolicyId}")]
         public async Task<InsurancePolicies> PolicyAccepted(int PolicyId)
         {
             return  await _policyServices.PolicyAccepted(PolicyId);
         }
 
-        [Authorize(Roles = "user")]
+        [Authorize(Roles = "admin")]
         [HttpPost("{PolicyId}")]
         public async Task<InsurancePolicies> PolicyRejected(int PolicyId)
         {

@@ -12,6 +12,10 @@ namespace Backend.Models
         [Required]
         public string RCProof { get; set; }
 
+        public int PolicyID     { get; set; }
+
+        [ForeignKey("PolicyID")]
+        public InsurancePolicies InsurancePolicies { get; set; }
         
         public int UserID { get; set; }
 

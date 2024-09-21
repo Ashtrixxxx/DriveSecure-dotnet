@@ -17,6 +17,13 @@ namespace Backend.Controllers
             _documentServices =supportDocument;
         }
 
+        [HttpGet("{PolicyId}")]
+        [Authorize(Policy = "AdminAndUser")]
+        public async Task<SupportDocuments> GetSupportDocumnetsForPolicy(int PolicyId)
+        {
+            return await _documentServices.GetSupportDocumnetsForPolicy(PolicyId);
+        }
+
 
         [Authorize(Policy = "AdminAndUser")]
 

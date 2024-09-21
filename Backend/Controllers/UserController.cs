@@ -29,11 +29,20 @@ namespace Backend.Controllers
 
         [Authorize(Roles = "user")]
 
-        [HttpGet]
+        [HttpGet()]
         public async Task<UserDetails> UpdateUser(UserDetails userDetails)
         {
             return await _user.UpdateUser(userDetails);
         }
+
+        [Authorize(Roles = "user")]
+
+        [HttpGet("{username}")]
+        public async Task<UserDetails> GetUserByUserName(string username)
+        {
+            return await _user.GetUserByUserName(username);
+        }
+
 
         [Authorize(Roles = "user")]
         [HttpGet("{UserId}")]

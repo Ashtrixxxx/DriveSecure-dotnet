@@ -1,5 +1,6 @@
 ﻿using Backend.Models;
 using Backend.Repository;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Service
@@ -15,6 +16,14 @@ namespace Backend.Service
         {
             return await _context.SupportDocuments.ToListAsync();
         }
+
+
+        public async Task<SupportDocuments> GetSupportDocumnetsForPolicy(int PolicyId)
+        {
+            //return await _context.SupportDocuments.FirstOrDefaultAsync(p => p.)
+            return await _context.SupportDocuments.FirstOrDefaultAsync(p=> p.PolicyID == PolicyId);
+        }
+
 
         public async Task<SupportDocuments> GetSupportDocumnetsById(int id)
         {
