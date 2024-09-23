@@ -24,6 +24,8 @@ namespace Backend.Models
 
         public DbSet<AdminDetails> Admins { get; set; }
 
+        public DbSet<UserProfile> UserProfiles { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<UserDetails>()

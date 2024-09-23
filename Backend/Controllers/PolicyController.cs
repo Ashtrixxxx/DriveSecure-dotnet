@@ -59,6 +59,7 @@ namespace Backend.Controllers
         public async Task<InsurancePolicies> PolicyRejected(int PolicyId)
         {
             return await _policyServices.PolicyRejected(PolicyId);
+
         }
 
         [Authorize(Roles = "user")]
@@ -67,7 +68,7 @@ namespace Backend.Controllers
         {
             return await _policyServices.ShowAcceptedPolicies();
         }
-
+     
 
         [Authorize(Roles = "user")]
         [HttpGet]
