@@ -10,7 +10,6 @@ namespace Backend.Models
 
         public DbSet<UserDetails> UserDetails { get; set; }
 
-        public DbSet<UserAddress> UserAddress { get; set; }
 
         public DbSet<InsurancePolicies> InsurancePolicies { get; set; }
 
