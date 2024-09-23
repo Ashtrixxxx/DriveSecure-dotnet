@@ -115,7 +115,7 @@ namespace Backend.Controllers
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = subject,
-                    Expires = DateTime.UtcNow.AddMinutes(30),
+                    Expires = DateTime.UtcNow.AddMinutes(1),
                     Issuer = issuer,
                     Audience = audience,
                     SigningCredentials = signingCredentials

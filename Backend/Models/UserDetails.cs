@@ -19,27 +19,10 @@ namespace Backend.Models
 
         [Required]
         public string UserPass { get; set; }
-        [Required]
-        public string ProfileUrl { get; set; }
-        [Required]
-        [MaxLength(50)]
-        public string FirstName { get; set; }
-        [Required]
-        [MaxLength(50)]
-        public string LastName { get; set; }
-        [Required]
-        public DateOnly DOB { get; set; }
-        [Required]
-        public string Gender { get; set; }
-        [Required]
-        [MaxLength(10)]
-        public string Phone { get; set; }
+
         [Required]
         [EmailAddress]
         public string Email { get; set; }
-        
-        [Required]
-        public string Occupation { get; set; }
 
         public Role Role { get; set; }
         //Navigation Properties
