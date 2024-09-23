@@ -28,6 +28,16 @@ namespace Backend.Models
         [Required]
         public string Occupation { get; set; }
 
+        [Required]
+        public string StreetAddr { get; set; }
+        [Required]
+        public string Country { get; set; }
+        [Required]
+        public string Zipcode { get; set; }
+        [Required]
+        public string City { get; set; }
+
+
         public int UserID { get; set; }
 
         [ForeignKey("UserID")]
