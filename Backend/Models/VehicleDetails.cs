@@ -45,7 +45,6 @@ namespace Backend.Models
 
         public int UserID { get; set; }
 
-
         //Foreign key
         [ForeignKey("UserID")]
         public UserDetails? UserDetails { get; set; }

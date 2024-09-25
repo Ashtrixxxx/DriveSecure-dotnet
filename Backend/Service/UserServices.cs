@@ -26,8 +26,11 @@ namespace Backend.Service
         private readonly ISupportDocumentServices _supportDocumentServices;
         private readonly IEmailService _emailService;
 
-        public UserServices(DriveDbContext cont , IEmailService emailService) {
-            
+        public UserServices(DriveDbContext cont , IEmailService emailService, IPolicyServices policyServices,IVehicleServices vehicleServices,ISupportDocumentServices supportDocumentServices) {
+
+            _vehicleServices = vehicleServices;
+            _supportDocumentServices = supportDocumentServices;
+            _policyServices = policyServices;
             _emailService = emailService;
         
             _context = cont;
@@ -68,17 +71,34 @@ namespace Backend.Service
         }
 
 
-        public async Task OnPaymentCompletion(int UserId,VehicleDetails VDetails, InsurancePolicies PolicyDetails, PaymentDetails PaymentDetails, SupportDocuments supportDocuments)
+        public async Task OnFormSubmission(int UserId,VehicleDetails VDetails, InsurancePolicies PolicyDetails, SupportDocuments supportDocuments)
         {
 
-            var user = GetUserById(UserId);
+            try
+            {
+                PolicyDetails.UserID = UserId;
+                InsurancePolicies returned_policy = await _policyServices.CreatePolicy(PolicyDetails);
 
 
 
-            _vehicleServices.CreateVehicle(VDetails);
-            _policyServices.CreatePolicy(PolicyDetails);
-            _paymentServices.AddPaymentDetails(PaymentDetails);
-            _supportDocumentServices.AddSupportDocument(supportDocuments);
+                VDetails.UserID = UserId;
+                VDetails.PolicyID = returned_policy.PolicyID;
+
+
+                await _vehicleServices.CreateVehicle(VDetails);
+
+
+                supportDocuments.PolicyID = returned_policy.PolicyID;
+                supportDocuments.UserID = UserId;
+
+                SupportDocuments docs = await _supportDocumentServices.AddSupportDocument(supportDocuments);
+            }catch(Exception e)
+            {
+                // Rollback transaction in case of error
+                throw;
+            }
+
+            
     }
 
 

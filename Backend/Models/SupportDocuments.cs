@@ -15,7 +15,7 @@ namespace Backend.Models
         public int PolicyID     { get; set; }
 
         [ForeignKey("PolicyID")]
-        public InsurancePolicies InsurancePolicies { get; set; }
+        public InsurancePolicies? InsurancePolicies { get; set; }
         
         public int UserID { get; set; }
 
