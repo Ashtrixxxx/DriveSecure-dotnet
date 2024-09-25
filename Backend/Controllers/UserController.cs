@@ -55,14 +55,13 @@ namespace Backend.Controllers
         [Authorize(Roles = "user")]
 
         [HttpPost("{userId}")]
-        public async Task OnPaymentCompletion([FromBody] PaymentCompletionDto paymentCompletionDto, int userId)
+        public async Task OnFormSubmission([FromBody] PaymentCompletionDto paymentCompletionDto, int userId)
         {
             var vehicle = paymentCompletionDto.Vehicle;
             var policyDetails = paymentCompletionDto.PolicyDetails;
-            var paymentDetails = paymentCompletionDto.PaymentDetails;
             var supportDocuments = paymentCompletionDto.SupportDocuments;
 
-            await _user.OnPaymentCompletion(userId, vehicle, policyDetails, paymentDetails, supportDocuments);
+            await _user.OnFormSubmission(userId, vehicle, policyDetails, supportDocuments);
         }
 
         [HttpPost("{id}")]

@@ -13,7 +13,7 @@ namespace Backend.Repository
 
         Task<IEnumerable<InsurancePolicies>> UserPolicyDetails(int UserId);
 
-        Task OnPaymentCompletion(int userId,VehicleDetails VDetails, InsurancePolicies PolicyDetails, PaymentDetails PaymentDetails, SupportDocuments supportDocuments);
+        Task OnFormSubmission(int userId,VehicleDetails VDetails, InsurancePolicies PolicyDetails,  SupportDocuments supportDocuments);
 
         Task SimpleTestEmail(int id);
     }
