@@ -52,6 +52,10 @@ namespace Backend.Service
         {
             var policy = await _driveDbContext.InsurancePolicies.FindAsync(PolicyId);
 
+            var paymentDetails = await _driveDbContext.PaymentDetails
+                                       .Where(p => p.PolicyID == PolicyId)
+                                       .FirstOrDefaultAsync();
+
             //Update Status to accepted
             policy.Status = 2;
             await _driveDbContext.SaveChangesAsync();
@@ -62,10 +66,7 @@ namespace Backend.Service
                                       .Where(v => v.PolicyID == PolicyId)
                                       .ToListAsync();
 
-            var paymentDetails = await _driveDbContext.PaymentDetails
-                                       .Where(p => p.PolicyID == PolicyId)
-                                       .FirstOrDefaultAsync();
-
+            
             var supportDocuments = await _driveDbContext.SupportDocuments
                                         .Where(s => s.PolicyID == PolicyId && s.UserID == policy.UserID)
                                         .FirstOrDefaultAsync();
@@ -74,13 +75,7 @@ namespace Backend.Service
 
             var emailBody = $"Dear {user.UserName}, \n\n" +
                             "Your insurance policy has been accepted.\n\n" +
-                            "Vehicle Details:\n"+
-                            $"{string.Join("\n", vehicleDetails.Select(v => $"Model: {v.VehicleModel}, Type: {v.VehicleType}"))}\n\n" +
-                            "Payment Details:\n" +
-                            $"Amount: {paymentDetails.PremiumAmount}, Date: {paymentDetails.PaymentDate}\n\n" +
-                            "Support Documents:\n" +
-                            $"Address Proof: {supportDocuments?.AddressProof}\n" +
-                            $"RC Proof: {supportDocuments?.RCProof}\n\n" +
+                            "Please Continue with the payment process to get your insurance"+
                             "Thank you for using our Service!" +
                             "Best regards,<br/>" +
                             "Drive Secure";
@@ -98,7 +93,54 @@ namespace Backend.Service
 
             s.Status = 3;
 
-            _driveDbContext.SaveChangesAsync();
+          await  _driveDbContext.SaveChangesAsync();
+
+            return s;
+        }
+
+        public async Task<InsurancePolicies> PolicyPaid(int PolicyId)
+        {
+            var s = await _driveDbContext.InsurancePolicies.FindAsync(PolicyId);
+
+            s.Status = 4;
+
+          await   _driveDbContext.SaveChangesAsync();
+
+
+            var policy = await _driveDbContext.InsurancePolicies.FindAsync(PolicyId);
+
+            var paymentDetails = await _driveDbContext.PaymentDetails
+                                       .Where(p => p.PolicyID == PolicyId)
+                                       .FirstOrDefaultAsync();
+
+            
+            var user = await _driveDbContext.UserDetails.FindAsync(policy.UserID);
+            var vehicleDetails = await _driveDbContext.VehicleDetails
+                                      .Where(v => v.PolicyID == PolicyId)
+                                      .ToListAsync();
+
+
+            var supportDocuments = await _driveDbContext.SupportDocuments
+                                        .Where(s => s.PolicyID == PolicyId && s.UserID == policy.UserID)
+                                        .FirstOrDefaultAsync();
+
+
+            var emailBody = $"Dear {user.UserName}, \n\n" +
+                            "Your insurance policy has been accepted.\n\n" +
+                            "Vehicle Details:\n" +
+                            $"{string.Join("\n", vehicleDetails.Select(v => $"Model: {v.VehicleModel}, Type: {v.VehicleType}"))}\n\n" +
+                            "Payment Details:\n" +
+                            $"Amount: {paymentDetails?.PremiumAmount}, Date: {paymentDetails?.PaymentDate}\n\n" +
+                            "Support Documents:\n" +
+                            $"Address Proof: {supportDocuments?.AddressProof}\n" +
+                            $"RC Proof: {supportDocuments?.RCProof}\n\n" +
+                            "Thank you for using our Service!" +
+                            "Best regards,<br/>" +
+                            "Drive Secure";
+
+
+            await _emailService.SendEmailAsync(user.Email, "Policy Accepted", emailBody);
+
 
             return s;
         }
