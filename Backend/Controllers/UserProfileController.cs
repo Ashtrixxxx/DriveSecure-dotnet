@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace Backend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class UserProfileController : ControllerBase
     {
@@ -19,9 +19,29 @@ namespace Backend.Controllers
             _context = context;
         }
 
-        // GET: api/UserProfile
-        [Authorize]
-        [HttpGet]
+
+
+        [HttpGet("{userId}")]
+        [Authorize(Roles = "user")]
+        public async Task<UserProfile> GetUserProfile(int userId)
+        {
+            return await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserID == userId);
+        }
+
+        [Authorize(Roles = "user")]
+        
+        [HttpPost]
+        public async Task<UserProfile> CreateUserProfile([FromBody] UserProfile userProfile)
+        {
+            userProfile.IsProfiled = true;  
+              _context.UserProfiles.Add(userProfile);
+            await _context.SaveChangesAsync();
+            return userProfile;
+        }
+
+
+        [Authorize(Roles ="user")]
+        [HttpPut]
         public async Task<IActionResult> UpdateUserProfile([FromBody] UserProfileDto userProfileDto)
         {
             //  decode the token to get the user ID
