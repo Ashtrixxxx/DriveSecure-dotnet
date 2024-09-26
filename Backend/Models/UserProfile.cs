@@ -38,7 +38,7 @@ namespace Backend.Models
         public string City { get; set; }
 
         [Required]
-        public bool IsProfiled { get; set; } = false;
+        public bool IsProfiled { get; set; }
 
         public int UserID { get; set; }
 
