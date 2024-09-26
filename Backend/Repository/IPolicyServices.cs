@@ -9,7 +9,7 @@ namespace Backend.Repository
 
         Task<IEnumerable<InsurancePolicies>> GetAllPoliciesForAdmin();
 
-
+        Task<InsurancePolicies> PolicyPaid(int PolicyId);
         Task<IEnumerable<InsurancePolicies>> GetAllPolicies(int UserId);
 
         Task <InsurancePolicies> GetPolicyDetails(int PolicyId);

@@ -11,10 +11,11 @@ namespace Backend.Controllers
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentServices _paymentServices;
-
-        public PaymentController(IPaymentServices paymentServices)
+        private readonly IPolicyServices _policyServices;
+        public PaymentController(IPaymentServices paymentServices, IPolicyServices policyServices)
         {
             _paymentServices = paymentServices;
+            _policyServices = policyServices;
         }
 
         [Authorize(Policy = "AdminAndUser")]
@@ -32,10 +33,13 @@ namespace Backend.Controllers
         }
 
 
-        [NonAction]
+        [Authorize(Roles = "user")]
+        [HttpPost]
         public async Task<PaymentDetails> CreatePaymentDetails(PaymentDetails paymentDetails)
         {
+            await _policyServices.PolicyPaid(paymentDetails.PolicyID);
            return  await _paymentServices.AddPaymentDetails(paymentDetails);
+
         }
 
 
