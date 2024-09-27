@@ -4,6 +4,6 @@
     {
 
         Task SendEmailAsync(string to, string subject, string body);
-
+        Task SendResetPasswordEmail(string email, string resetUrl);
     }
 }
