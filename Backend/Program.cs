@@ -7,6 +7,7 @@ using System.Text;
 using Backend.Controllers;
 using Backend.Repository;
 using Backend.Service;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
