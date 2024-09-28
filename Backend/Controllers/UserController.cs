@@ -5,6 +5,7 @@ using Backend.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {
@@ -21,9 +22,21 @@ namespace Backend.Controllers
 
         
         [HttpPost]
-        public async Task<UserDetails> CreateUser(UserDetails userDetails)
+        public async Task<ActionResult> CreateUser(UserDetails userDetails)
         {
-            return await _user.CreateUser(userDetails);
+            try
+            {
+                return Ok(await _user.CreateUser(userDetails));
+            }
+            catch (DbUpdateException ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("unique index"))
+                {
+                    return BadRequest(new { message = "Username already exists" });
+                }
+
+                return StatusCode(500, ex.InnerException.Message);
+            }
         }
 
 
