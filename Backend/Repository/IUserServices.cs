@@ -15,6 +15,9 @@ namespace Backend.Repository
 
         Task OnFormSubmission(int userId,VehicleDetails VDetails, InsurancePolicies PolicyDetails,  SupportDocuments supportDocuments);
 
+        Task SendPasswordResetEmail(string email);
+        Task ResetPassword(string token, string newPassword);
+
         Task SimpleTestEmail(int id);
     }
 }

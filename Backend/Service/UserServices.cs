@@ -71,6 +71,50 @@ namespace Backend.Service
         }
 
 
+        public async Task SendPasswordResetEmail(string email)
+        {
+            var user = await _context.UserDetails.FirstOrDefaultAsync(i => i.Email == email);
+            if (user == null)
+            {
+                throw new ArgumentException("User not found.");
+            }
+
+            if (string.IsNullOrEmpty(user.Email))
+            {
+                throw new InvalidOperationException("User email is not set.");
+            }
+
+            // Generate token
+            var token = Guid.NewGuid().ToString();
+            user.PasswordResetToken = token;
+            user.PasswordResetTokenExpiry = DateTime.UtcNow.AddHours(1); // Token expires in 1 hour
+            await _context.SaveChangesAsync();
+
+            // Send email
+            var resetLink = $"http://localhost:3000/reset-password?token={token}"; // Adjust URL as needed
+            var subject = "Password Reset Request";
+            var body = $"Please reset your password by clicking on the following link: <a href='{resetLink}'>Reset Password</a>";
+
+            await _emailService.SendEmailAsync(user.Email, subject, body);
+        }
+
+        public async Task ResetPassword(string token, string newPassword)
+        {
+            var user = await _context.UserDetails
+                .FirstOrDefaultAsync(u => u.PasswordResetToken == token && u.PasswordResetTokenExpiry > DateTime.UtcNow);
+
+            if (user == null)
+            {
+                throw new ArgumentException("Invalid or expired token.");
+            }
+
+            user.UserPass = newPassword;
+            user.PasswordResetToken = null;
+            user.PasswordResetTokenExpiry = null;
+            await _context.SaveChangesAsync();
+        }
+
+
         public async Task OnFormSubmission(int UserId,VehicleDetails VDetails, InsurancePolicies PolicyDetails, SupportDocuments supportDocuments)
         {
 
