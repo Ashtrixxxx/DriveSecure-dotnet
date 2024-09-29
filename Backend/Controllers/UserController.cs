@@ -6,9 +6,21 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 
 namespace Backend.Controllers
 {
+    public class EmailRequest
+    {
+        public string Email { get; set; }
+    }
+
+    public class ResetPassword
+    {
+        public string token { get; set; }
+        public string password { get; set; }
+    }
+
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -38,6 +50,26 @@ namespace Backend.Controllers
                 return StatusCode(500, ex.InnerException.Message);
             }
         }
+        [HttpPost]
+        public async Task<IActionResult> SendPasswordResetEmail([FromBody] EmailRequest emailRequest)
+        {
+            if (string.IsNullOrEmpty(emailRequest.Email))
+            {
+                return BadRequest("Email is required.");
+            }
+
+            await _user.SendPasswordResetEmail(emailRequest.Email);
+            return Ok();
+        }
+        [HttpPost]
+
+        public async Task ResetPassword([FromBody] ResetPassword r)
+        {
+            await _user.ResetPassword(r.token,r.password);
+        }
+
+
+
 
 
         [Authorize(Roles = "user")]

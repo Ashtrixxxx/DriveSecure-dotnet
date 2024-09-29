@@ -25,6 +25,11 @@ namespace Backend.Models
         public string Email { get; set; }
 
         public Role Role { get; set; }
+
+        public string? PasswordResetToken { get; set; }
+
+        public DateTime? PasswordResetTokenExpiry { get; set; }
+
         //Navigation Properties
         //public ICollection<InsurancePolicies> InsurancePolicies { get; set; } = new List<InsurancePolicies>();
         //public ICollection<PaymentHistory> paymentHistories { get; set; } = new List<PaymentHistory>();
