@@ -45,16 +45,16 @@ namespace Backend.Controllers
         public async Task<IActionResult> UpdateUserProfile([FromBody] UserProfileDto userProfileDto)
         {
             //  decode the token to get the user ID
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
+            var userId = userProfileDto.UserId;
 
             // Retrieve the user based on the user ID from claims
-            var user = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserID.ToString() == userId);
+            var user = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserID == userId);
             if (user == null)
             {
                 return NotFound("User not found");
             }
             // Update user details
+            user.UserID = userProfileDto.UserId;
             user.ProfileUrl = userProfileDto.ProfileUrl;
             user.FirstName = userProfileDto.FirstName;
             user.LastName = userProfileDto.LastName;

@@ -1,7 +1,9 @@
 ﻿using Backend.Models;
+using Google.Apis.Drive.v3.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -28,6 +30,7 @@ namespace Backend.Controllers
             UserDetails s = _con.UserDetails
                 .FirstOrDefault(i => i.UserName == username && i.UserPass == password);
 
+           
             return s;
         }
 
@@ -94,7 +97,12 @@ namespace Backend.Controllers
             Console.WriteLine($"UserName: {request.UserName}, UserPass: {request.UserPass}");
             IActionResult response = Unauthorized();
 
+           
             var s = Validate(request.UserName, request.UserPass);
+            if (s == null)
+            {
+                return Unauthorized(new { message = "Invalid user credentials" });
+            }
             if (s != null)
             {
                 var issuer = _config["Jwt:Issuer"];
