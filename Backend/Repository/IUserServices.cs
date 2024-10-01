@@ -7,6 +7,9 @@ namespace Backend.Repository
     {
 
         Task<UserDetails> GetUserByUserName(string username);
+
+        Task<UserDetails> GetUserByUserId(int userid);
+
         Task<UserDetails> CreateUser(UserDetails userDetails);
 
         Task<UserDetails> UpdateUser(UserDetails userDetails);

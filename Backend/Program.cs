@@ -8,6 +8,7 @@ using Backend.Controllers;
 using Backend.Repository;
 using Backend.Service;
 using Microsoft.AspNetCore.Identity;
+using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,8 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Emai
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IReminderService, ReminderService>();
 
+builder.Services.AddHangfire(x => x.UseSqlServerStorage(builder.Configuration.GetConnectionString("conn")));
+builder.Services.AddHangfireServer();
 
 
 // Configure Swagger
@@ -114,6 +117,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+//hangfire
+app.UseHangfireDashboard();
+app.UseHangfireServer();
+
+// Schedule the task to run daily
+RecurringJob.AddOrUpdate<ExpiryReminderService>(service => service.CheckAndSendReminders(), Cron.Daily);
 
 // Enable authentication and authorization middleware
 app.UseHttpsRedirection();

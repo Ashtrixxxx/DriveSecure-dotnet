@@ -98,6 +98,7 @@ namespace Backend.Service
             await _emailService.SendEmailAsync(user.Email, subject, body);
         }
 
+
         public async Task ResetPassword(string token, string newPassword)
         {
             var user = await _context.UserDetails
@@ -158,6 +159,14 @@ namespace Backend.Service
 
             await _emailService.SendEmailAsync(myemail, subject, body);
         }
+
+
+        public async Task<UserDetails> GetUserByUserId(int userid)
+
+        {
+            return await _context.UserDetails.FindAsync(userid);
+        }
+
 
     }
 }

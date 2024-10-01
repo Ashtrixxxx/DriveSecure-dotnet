@@ -40,6 +40,32 @@ namespace Backend.Service
             }
         }
 
+
+        public async void SendExpiryNotification(string toEmail, string policyDetails)
+        {
+
+            using (var client = new SmtpClient(_emailSettings.SmtpServer, int.Parse(_emailSettings.Port)))
+            {
+                client.Credentials = new NetworkCredential(_emailSettings.Username, _emailSettings.Password);
+                client.EnableSsl = true;
+
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress(_emailSettings.From),
+                    Subject = "Insurance Expiry Reminder",
+                    Body = $"Dear customer, your insurance policy {policyDetails} is about to expire. Please renew it soon.",
+                    IsBodyHtml = true
+                };
+                mailMessage.To.Add(toEmail);
+
+                await client.SendMailAsync(mailMessage);
+            }
+
+
+
+            
+        }
+
         public async Task SendEmailAsync(string to, string subject, string body)
         {
             using (var client = new SmtpClient(_emailSettings.SmtpServer, int.Parse(_emailSettings.Port)))

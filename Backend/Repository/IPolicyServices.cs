@@ -9,6 +9,7 @@ namespace Backend.Repository
 
         Task<IEnumerable<InsurancePolicies>> GetAllPoliciesForAdmin();
 
+        Task<IEnumerable<InsurancePolicies>> GetPoliciesExpiringSoon(int daysBeforeExpiry = 7);
         Task<InsurancePolicies> PolicyPaid(int PolicyId);
         Task<IEnumerable<InsurancePolicies>> GetAllPolicies(int UserId);
 

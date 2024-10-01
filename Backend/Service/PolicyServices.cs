@@ -163,5 +163,19 @@ namespace Backend.Service
         }
 
 
+        public async Task<IEnumerable<InsurancePolicies>> GetPoliciesExpiringSoon(int daysBeforeExpiry = 7)
+        {
+            var currentDate = DateOnly.FromDateTime(DateTime.Now); // Get current date in DateOnly format
+            var targetDate = currentDate.AddDays(daysBeforeExpiry); // Calculate target date by adding 'daysBeforeExpiry'
+
+            // Retrieve policies where CoverageEndDate is within the next 'daysBeforeExpiry'
+            
+
+            return await _driveDbContext.InsurancePolicies
+                .Where(p => p.CoverageEndDate >= currentDate && p.CoverageEndDate <= targetDate && !p.IsRenewed)
+                .ToListAsync(); ;
+        }
+
+
     }
 }
