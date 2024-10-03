@@ -129,7 +129,6 @@ RecurringJob.AddOrUpdate<ExpiryReminderService>(service => service.CheckAndSendR
 app.UseHttpsRedirection();
 app.UseAuthentication(); // This is required for JWT authentication
 app.UseAuthorization();
-
 app.MapControllers();
 
 

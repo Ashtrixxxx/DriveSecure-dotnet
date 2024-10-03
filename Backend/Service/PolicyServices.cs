@@ -1,5 +1,8 @@
 ﻿using Backend.Models;
 using Backend.Repository;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
 using MailKit;
 using Microsoft.EntityFrameworkCore;
 
@@ -124,6 +127,8 @@ namespace Backend.Service
                                         .Where(s => s.PolicyID == PolicyId && s.UserID == policy.UserID)
                                         .FirstOrDefaultAsync();
 
+            var pdfBytes = GeneratePolicyPdf(user, vehicleDetails, paymentDetails, supportDocuments);
+
 
             var emailBody = $"Dear {user.UserName}, \n\n" +
                             "Your insurance policy has been accepted.\n\n" +
@@ -131,18 +136,50 @@ namespace Backend.Service
                             $"{string.Join("\n", vehicleDetails.Select(v => $"Model: {v.VehicleModel}, Type: {v.VehicleType}"))}\n\n" +
                             "Payment Details:\n" +
                             $"Amount: {paymentDetails?.PremiumAmount}, Date: {paymentDetails?.PaymentDate}\n\n" +
-                            "Support Documents:\n" +
-                            $"Address Proof: {supportDocuments?.AddressProof}\n" +
-                            $"RC Proof: {supportDocuments?.RCProof}\n\n" +
+                            "Your insurance has been attached with the email"+
                             "Thank you for using our Service!" +
                             "Best regards,<br/>" +
                             "Drive Secure";
 
 
-            await _emailService.SendEmailAsync(user.Email, "Policy Accepted", emailBody);
+            await _emailService.SendEmailWithPdfAsync(user.Email, "Policy Accepted", emailBody, pdfBytes, "PolicyDetails.pdf");
 
 
             return s;
+        }
+
+        public byte[] GeneratePolicyPdf(UserDetails user, List<VehicleDetails> vehicleDetails, PaymentDetails paymentDetails, SupportDocuments supportDocuments)
+        {
+            using (var ms = new MemoryStream())
+            {
+                // Create a PDF writer to write to the memory stream
+                PdfWriter writer = new PdfWriter(ms);
+                PdfDocument pdf = new PdfDocument(writer);
+                Document document = new Document(pdf);
+
+                // Add content to the PDF
+                document.Add(new Paragraph($"Dear {user.UserName},"));
+                document.Add(new Paragraph("Your insurance policy has been accepted."));
+                document.Add(new Paragraph("\nVehicle Details:"));
+                foreach (var vehicle in vehicleDetails)
+                {
+                    document.Add(new Paragraph($"Model: {vehicle.VehicleModel}, Type: {vehicle.VehicleType}"));
+                }
+
+                document.Add(new Paragraph("\nPayment Details:"));
+                document.Add(new Paragraph($"Amount: {paymentDetails?.PremiumAmount}, Date: {paymentDetails?.PaymentDate}"));
+
+                document.Add(new Paragraph("\nSupport Documents:"));
+                document.Add(new Paragraph($"Address Proof: {supportDocuments?.AddressProof}"));
+                document.Add(new Paragraph($"RC Proof: {supportDocuments?.RCProof}"));
+
+                document.Add(new Paragraph("\nThank you for using our Service!"));
+                document.Add(new Paragraph("Best regards,\nDrive Secure"));
+
+                document.Close();
+
+                return ms.ToArray(); // Return the generated PDF as byte array
+            }
         }
 
         public async Task<IEnumerable<InsurancePolicies>> ShowAcceptedPolicies()

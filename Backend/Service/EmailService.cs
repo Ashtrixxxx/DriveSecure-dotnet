@@ -5,6 +5,11 @@ using System.Net;
 using MailKit.Security;
 using MimeKit;
 using Humanizer;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using System.Net.Mime;
+
 
 namespace Backend.Service
 {
@@ -85,5 +90,48 @@ namespace Backend.Service
                 await client.SendMailAsync(mailMessage);
             }
         }
-    }
+
+
+        public async Task SendEmailWithPdfAsync(string toEmail, string subject, string body, byte[] pdfBytes, string pdfFileName)
+        {
+            // Set up SMTP client
+            using (var client = new SmtpClient(_emailSettings.SmtpServer, int.Parse(_emailSettings.Port)))
+            {
+                // Set SMTP credentials
+                client.Credentials = new NetworkCredential(_emailSettings.Username, _emailSettings.Password);
+                client.EnableSsl = true;
+
+                // Create email message
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress(_emailSettings.From),
+                    Subject = subject,
+                    Body = body,
+                    IsBodyHtml = true // Set to true for HTML emails
+                };
+
+                // Add recipient
+                mailMessage.To.Add(toEmail);
+
+                // Attach PDF to the email
+                if (pdfBytes != null && pdfBytes.Length > 0)
+                {
+                    using (var ms = new MemoryStream(pdfBytes))
+                    {
+                        var attachment = new Attachment(ms, pdfFileName, MediaTypeNames.Application.Pdf);
+                        mailMessage.Attachments.Add(attachment);
+
+                        // Send the email with the attached PDF
+                        await client.SendMailAsync(mailMessage);
+                    }
+                }
+                else
+                {
+                    // Send email without attachment if no PDF is provided
+                    await client.SendMailAsync(mailMessage);
+                }
+            }
+        }
+
+        }
 }
