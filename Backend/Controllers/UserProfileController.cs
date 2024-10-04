@@ -1,5 +1,6 @@
 ﻿using Backend.Dto;
 using Backend.Models;
+using log4net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ namespace Backend.Controllers
     public class UserProfileController : ControllerBase
     {
         private readonly DriveDbContext _context;
-
+        private static readonly ILog log = LogManager.GetLogger(typeof(UserProfileController));
         public UserProfileController(DriveDbContext context)
         {
             _context = context;
@@ -25,6 +26,8 @@ namespace Backend.Controllers
         [Authorize(Roles = "user")]
         public async Task<UserProfile> GetUserProfile(int userId)
         {
+            log.Info("Fetching user profile if it exists");
+
             return await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserID == userId);
         }
 
@@ -33,6 +36,8 @@ namespace Backend.Controllers
         [HttpPost]
         public async Task<UserProfile> CreateUserProfile([FromBody] UserProfile userProfile)
         {
+
+            log.Info("Creating a profile for a user");
             userProfile.IsProfiled = true;  
               _context.UserProfiles.Add(userProfile);
             await _context.SaveChangesAsync();
@@ -46,11 +51,12 @@ namespace Backend.Controllers
         {
             //  decode the token to get the user ID
             var userId = userProfileDto.UserId;
-
+            log.Info("Updating a user profile");
             // Retrieve the user based on the user ID from claims
             var user = await _context.UserProfiles.FirstOrDefaultAsync(u => u.UserID == userId);
             if (user == null)
             {
+                log.Info("No such user found to update ");
                 return NotFound("User not found");
             }
             // Update user details
@@ -69,7 +75,7 @@ namespace Backend.Controllers
             user.IsProfiled = true; // Mark as profiled
 
             await _context.SaveChangesAsync();
-
+            log.Info("Profile has been updated succesfully");
             return Ok("Profile updated successfully");
         }
     }

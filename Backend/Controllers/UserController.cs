@@ -2,6 +2,7 @@
 using Backend.Models;
 using Backend.Repository;
 using Backend.Service;
+using log4net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +26,7 @@ namespace Backend.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
+        private  static  readonly ILog log = LogManager.GetLogger(typeof(UserController));
 
         private readonly IUserServices _user;
         public UserController(IUserServices userServices) {
@@ -38,6 +40,7 @@ namespace Backend.Controllers
         {
             try
             {
+                log.Info("Trying to create a user");
                 return Ok(await _user.CreateUser(userDetails));
             }
             catch (DbUpdateException ex)
@@ -45,6 +48,7 @@ namespace Backend.Controllers
                 if (ex.InnerException != null && ex.InnerException.Message.Contains("unique index"))
                 {
                     return BadRequest(new { message = "Username already exists" });
+                    log.Warn("Username already exists");
                 }
 
                 return StatusCode(500, ex.InnerException.Message);
@@ -53,9 +57,11 @@ namespace Backend.Controllers
         [HttpPost]
         public async Task<IActionResult> SendPasswordResetEmail([FromBody] EmailRequest emailRequest)
         {
+            log.Info("Trying to send a email for password request");
             if (string.IsNullOrEmpty(emailRequest.Email))
             {
                 return BadRequest("Email is required.");
+                log.Warn("Pls provide a valid username");
             }
 
             await _user.SendPasswordResetEmail(emailRequest.Email);
@@ -65,7 +71,14 @@ namespace Backend.Controllers
 
         public async Task ResetPassword([FromBody] ResetPassword r)
         {
-            await _user.ResetPassword(r.token,r.password);
+            try
+            {
+                await _user.ResetPassword(r.token, r.password);
+            }
+            catch(Exception e)
+            {
+                log.Warn("Error has occured while creating new password");
+            }
         }
 
 
@@ -77,6 +90,7 @@ namespace Backend.Controllers
         [HttpGet()]
         public async Task<UserDetails> UpdateUser(UserDetails userDetails)
         {
+
             return await _user.UpdateUser(userDetails);
         }
 
@@ -93,6 +107,7 @@ namespace Backend.Controllers
         [HttpGet("{UserId}")]
         public async Task<IEnumerable<InsurancePolicies>> GetUserPolicies(int UserId)
         {
+            log.Info("fetching all the users policies");
             return await _user.UserPolicyDetails(UserId);
 
         }
@@ -102,6 +117,7 @@ namespace Backend.Controllers
         [HttpPost("{userId}")]
         public async Task OnFormSubmission([FromBody] PaymentCompletionDto paymentCompletionDto, int userId)
         {
+            log.Info("form has been submitted pls wait for transactions to take place");
             var vehicle = paymentCompletionDto.Vehicle;
             var policyDetails = paymentCompletionDto.PolicyDetails;
             var supportDocuments = paymentCompletionDto.SupportDocuments;

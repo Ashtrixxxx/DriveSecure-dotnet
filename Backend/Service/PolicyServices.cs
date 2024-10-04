@@ -1,5 +1,7 @@
 ﻿using Backend.Models;
 using Backend.Repository;
+using iText.IO.Image;
+using iText.Kernel.Font;
 using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
@@ -135,7 +137,7 @@ namespace Backend.Service
                             "Vehicle Details:\n" +
                             $"{string.Join("\n", vehicleDetails.Select(v => $"Model: {v.VehicleModel}, Type: {v.VehicleType}"))}\n\n" +
                             "Payment Details:\n" +
-                            $"Amount: {paymentDetails?.PremiumAmount}, Date: {paymentDetails?.PaymentDate}\n\n" +
+                            $"Amount: {paymentDetails.PremiumAmount}, Date: {paymentDetails.PaymentDate}\n\n" +
                             "Your insurance has been attached with the email"+
                             "Thank you for using our Service!" +
                             "Best regards,<br/>" +
@@ -157,30 +159,113 @@ namespace Backend.Service
                 PdfDocument pdf = new PdfDocument(writer);
                 Document document = new Document(pdf);
 
-                // Add content to the PDF
-                document.Add(new Paragraph($"Dear {user.UserName},"));
-                document.Add(new Paragraph("Your insurance policy has been accepted."));
-                document.Add(new Paragraph("\nVehicle Details:"));
+                // Create a custom font size and style for the header
+                var boldFont = PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD);
+
+                // Add Title
+                document.Add(new Paragraph("Insurance Policy Details")
+                                .SetFont(boldFont)
+                                .SetFontSize(18)
+                                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                                .SetMarginBottom(20));
+
+                // Greeting section
+                document.Add(new Paragraph($"Dear {user.UserName},")
+                                .SetFontSize(12)
+                                .SetMarginBottom(10));
+                document.Add(new Paragraph("Your insurance policy has been accepted.")
+                                .SetFontSize(12)
+                                .SetMarginBottom(15));
+
+                // Vehicle Details section
+                document.Add(new Paragraph("Vehicle Details:")
+                                .SetFont(boldFont)
+                                .SetFontSize(14)
+                                .SetMarginBottom(10));
                 foreach (var vehicle in vehicleDetails)
                 {
-                    document.Add(new Paragraph($"Model: {vehicle.VehicleModel}, Type: {vehicle.VehicleType}"));
+                    document.Add(new Paragraph($"Model: {vehicle.VehicleModel}, Type: {vehicle.VehicleType}")
+                                .SetFontSize(12));
                 }
 
-                document.Add(new Paragraph("\nPayment Details:"));
-                document.Add(new Paragraph($"Amount: {paymentDetails?.PremiumAmount}, Date: {paymentDetails?.PaymentDate}"));
+                // Add spacing
+                document.Add(new Paragraph("\n"));
 
-                document.Add(new Paragraph("\nSupport Documents:"));
-                document.Add(new Paragraph($"Address Proof: {supportDocuments?.AddressProof}"));
-                document.Add(new Paragraph($"RC Proof: {supportDocuments?.RCProof}"));
+                // Payment Details section
+                document.Add(new Paragraph("Payment Details:")
+                                .SetFont(boldFont)
+                                .SetFontSize(14)
+                                .SetMarginBottom(10));
+                document.Add(new Paragraph($"Amount: {paymentDetails.PremiumAmount}")
+                                .SetFontSize(12));
+                document.Add(new Paragraph($"Date: {paymentDetails.PaymentDate}")
+                                .SetFontSize(12));
 
-                document.Add(new Paragraph("\nThank you for using our Service!"));
-                document.Add(new Paragraph("Best regards,\nDrive Secure"));
+                // Add spacing
+                document.Add(new Paragraph("\n"));
 
-                document.Close();
+                // Support Documents section
+                document.Add(new Paragraph("Support Documents:")
+                                .SetFont(boldFont)
+                                .SetFontSize(14)
+                                .SetMarginBottom(10));
+
+                // Add Address Proof Image if available
+                if (!string.IsNullOrEmpty(supportDocuments?.AddressProof))
+                {
+                    try
+                    {
+                        var addressProofImage = ImageDataFactory.Create(supportDocuments.AddressProof);  // Fetch the image from the URL
+                        var addressImage = new Image(addressProofImage);
+                        addressImage.SetMaxHeight(150).SetMaxWidth(200); // Set size for the image
+                        document.Add(new Paragraph("Address Proof:").SetFontSize(12));
+                        document.Add(addressImage);
+                    }
+                    catch (Exception ex)
+                    {
+                        document.Add(new Paragraph("Failed to load Address Proof image.").SetFontSize(12));
+                    }
+                }
+                else
+                {
+                    document.Add(new Paragraph("Address Proof: Not available").SetFontSize(12));
+                }
+
+                // Add RC Proof Image if available
+                if (!string.IsNullOrEmpty(supportDocuments?.RCProof))
+                {
+                    try
+                    {
+                        var rcProofImage = ImageDataFactory.Create(supportDocuments.RCProof);  // Fetch the image from the URL
+                        var rcImage = new Image(rcProofImage);
+                        rcImage.SetMaxHeight(150).SetMaxWidth(200);  // Set size for the image
+                        document.Add(new Paragraph("RC Proof:").SetFontSize(12));
+                        document.Add(rcImage);
+                    }
+                    catch (Exception ex)
+                    {
+                        document.Add(new Paragraph("Failed to load RC Proof image.").SetFontSize(12));
+                    }
+                }
+                else
+                {
+                    document.Add(new Paragraph("RC Proof: Not available").SetFontSize(12));
+                }
+
+                // Add closing message
+                document.Add(new Paragraph("\nThank you for using our Service!")
+                                .SetFontSize(12)
+                                .SetMarginTop(20));
+                document.Add(new Paragraph("Best regards,\nDrive Secure")
+                                .SetFontSize(12)
+                                .SetMarginTop(5));
+
+                document.Close(); // Close the document
 
                 return ms.ToArray(); // Return the generated PDF as byte array
             }
         }
+
 
         public async Task<IEnumerable<InsurancePolicies>> ShowAcceptedPolicies()
         {

@@ -1,8 +1,11 @@
 ﻿using Backend.Models;
 using Backend.Repository;
+using log4net;
+using log4net.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using LogManager = log4net.LogManager;
 
 namespace Backend.Controllers
 {
@@ -10,6 +13,7 @@ namespace Backend.Controllers
     [ApiController]
     public class VehicleController : ControllerBase
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(VehicleController));
         private readonly IVehicleServices _vehicleServices;
         public VehicleController(IVehicleServices vehicleServices) {
 
@@ -20,6 +24,7 @@ namespace Backend.Controllers
         [Authorize(Policy = "AdminAndUser")]
         public async Task<IEnumerable<VehicleDetails>> GetAllVehicles(int Vid)
         {
+            log.Info("Fetching vehicles created by the user");
             return await _vehicleServices.GetAllVehiclesAsync(Vid);
         }
 
@@ -28,6 +33,7 @@ namespace Backend.Controllers
 
         public async Task<VehicleDetails> GetVehicleForPolicy(int PolicyID)
         {
+
             return await _vehicleServices.GetVehicleForPolicy(PolicyID);
         }
 
@@ -37,6 +43,7 @@ namespace Backend.Controllers
         [Authorize(Policy = "AdminAndUser")]
         public async Task<VehicleDetails> GetVehicleById(int Vid)
         {
+
             return await _vehicleServices.GetVehiclesAsync(Vid);
 
         }

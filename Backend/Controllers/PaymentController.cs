@@ -35,10 +35,10 @@ namespace Backend.Controllers
 
         [Authorize(Roles = "user")]
         [HttpPost]
-        public async Task<PaymentDetails> CreatePaymentDetails(PaymentDetails paymentDetails)
+        public async Task CreatePaymentDetails(PaymentDetails paymentDetails)
         {
+            await _paymentServices.AddPaymentDetails(paymentDetails);
             await _policyServices.PolicyPaid(paymentDetails.PolicyID);
-           return  await _paymentServices.AddPaymentDetails(paymentDetails);
 
         }
 

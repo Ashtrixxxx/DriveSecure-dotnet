@@ -60,23 +60,23 @@ namespace YourAppNamespace.Tests
             Assert.AreEqual(paymentDetail, result);
         }
 
-        [Test]
-        public async Task CreatePaymentDetails_ShouldReturnCreatedPaymentDetail()
-        {
-            // Arrange
-            var paymentDetail = new PaymentDetails { /* Initialize with properties */ };
-            var dummyInsurancePolicy = new InsurancePolicies { /* Initialize properties as needed */ };
+        //[Test]
+        //public async Task CreatePaymentDetails_ShouldReturnCreatedPaymentDetail()
+        //{
+        //    // Arrange
+        //    var paymentDetail = new PaymentDetails { /* Initialize with properties */ };
+        //    var dummyInsurancePolicy = new InsurancePolicies { /* Initialize properties as needed */ };
 
-            _policyServicesMock.Setup(s => s.PolicyPaid(paymentDetail.PolicyID)).ReturnsAsync(dummyInsurancePolicy);
-            _paymentServicesMock.Setup(s => s.AddPaymentDetails(paymentDetail)).ReturnsAsync(paymentDetail);
+        //    _policyServicesMock.Setup(s => s.PolicyPaid(paymentDetail.PolicyID)).ReturnsAsync(dummyInsurancePolicy);
+        //    _paymentServicesMock.Setup(s => s.AddPaymentDetails(paymentDetail)).ReturnsAsync(paymentDetail);
 
-            // Act
-            var result = await _controller.CreatePaymentDetails(paymentDetail);
+        //    // Act
+        //    //var result = await _controller.CreatePaymentDetails(paymentDetail);
 
-            // Assert
-            Assert.IsInstanceOf<PaymentDetails>(result);
-            Assert.AreEqual(paymentDetail, result);
-        }
+        //    // Assert
+        //    Assert.IsInstanceOf<PaymentDetails>(result);
+        //    Assert.AreEqual(paymentDetail, result);
+        //}
 
         [Test]
         public async Task UpdatePayment_ShouldReturnUpdatedPaymentDetail()

@@ -9,6 +9,8 @@ using Backend.Repository;
 using Backend.Service;
 using Microsoft.AspNetCore.Identity;
 using Hangfire;
+using log4net.Config;
+using log4net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -105,6 +107,10 @@ builder.Services.AddCors(options =>
 // Configure the DbContext
 builder.Services.AddDbContext<DriveDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("conn")));
+
+
+var logRepository = LogManager.GetRepository(System.Reflection.Assembly.GetEntryAssembly());
+XmlConfigurator.Configure(logRepository, new FileInfo("log4net.config"));
 
 // Build the app
 var app = builder.Build();

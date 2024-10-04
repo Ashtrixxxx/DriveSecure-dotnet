@@ -1,5 +1,6 @@
 ﻿using Backend.Models;
 using Backend.Repository;
+using log4net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ namespace Backend.Controllers
     [ApiController]
     public class PolicyController : ControllerBase
     {
-
+        private static readonly ILog log = LogManager.GetLogger(typeof(PolicyController));
         private readonly IPolicyServices _policyServices;
 
         public PolicyController(IPolicyServices policyServices)
@@ -26,6 +27,7 @@ namespace Backend.Controllers
         [HttpGet("{UserId}")]
         public async Task<IEnumerable<InsurancePolicies>> GetAllPolicies(int UserId)
         {
+            log.Info("Fetching all the policies for the user");
             return await _policyServices.GetAllPolicies(UserId);
         }
 
@@ -33,6 +35,7 @@ namespace Backend.Controllers
         [HttpGet]
        public async Task<IEnumerable<InsurancePolicies>> GetAllPoliciesForAdmin()
         {
+            log.Info("Fetching policies for admin");
             return await _policyServices.GetAllPoliciesForAdmin();
         }
 
@@ -51,6 +54,7 @@ namespace Backend.Controllers
         [HttpPost("{PolicyId}")]
         public async Task<InsurancePolicies> PolicyAccepted(int PolicyId)
         {
+            log.Info("Policy has been accepted");
             return  await _policyServices.PolicyAccepted(PolicyId);
         }
 
@@ -58,6 +62,8 @@ namespace Backend.Controllers
         [HttpPost("{PolicyId}")]
         public async Task<InsurancePolicies> PolicyRejected(int PolicyId)
         {
+            log.Info("Policy has been rejected");
+
             return await _policyServices.PolicyRejected(PolicyId);
 
         }

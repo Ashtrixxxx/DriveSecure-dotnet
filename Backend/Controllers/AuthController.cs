@@ -1,5 +1,6 @@
 ﻿using Backend.Models;
 using Google.Apis.Drive.v3.Data;
+using log4net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,9 @@ namespace Backend.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+
+        private static readonly ILog log = LogManager.GetLogger(typeof(AuthController));
+
         IConfiguration _config;
         private readonly DriveDbContext _con;
         public AuthController(IConfiguration configuration, DriveDbContext conn)
@@ -26,13 +30,36 @@ namespace Backend.Controllers
         [NonAction]
         public UserDetails Validate(string username, string password)
         {
+            try
+            {
+                // Log the start of the validation process
+                log.Info($"Attempting to validate user with username: {username}");
 
-            UserDetails s = _con.UserDetails
-                .FirstOrDefault(i => i.UserName == username && i.UserPass == password);
+                // Perform user validation
+                UserDetails user = _con.UserDetails
+                    .FirstOrDefault(i => i.UserName == username && i.UserPass == password);
 
-           
-            return s;
+                if (user != null)
+                {
+                    // Log successful validation
+                    log.Info($"User '{username}' successfully validated.");
+                }
+                else
+                {
+                    // Log failed validation
+                    log.Warn($"User '{username}' not found or password is incorrect.");
+                }
+
+                return user;
+            }
+            catch (Exception ex)
+            {
+                // Log any errors that occur during validation
+                log.Error($"An error occurred while validating user '{username}': {ex.Message}", ex);
+                throw; // Optionally rethrow the exception to propagate the error
+            }
         }
+
 
         [NonAction]
         public AdminDetails ValidateAdmin(string email, string password)
